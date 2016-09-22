@@ -1,29 +1,17 @@
 #define DEBUG 1
 #undef DEBUG
 #include<stdio.h>
-#include<windows.h>
-#include<TCHAR.h>
 #include "mainView.h"
-
-extern int __argc;
-extern TCHAR** __targv;
 
 #ifdef DEBUG
 #include "subway.h"
+using namespace std;
 #endif // DEBUG
 
 using namespace Metro;
 
-#ifdef DEBUG
-using namespace std;
-#endif // DEBUG
-
-//typedef HWND(WINAPI *PROCGETCONSOLEWINDOW)();
-//PROCGETCONSOLEWINDOW GetConsoleWindow;
-
 #ifndef DEBUG
-int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
-//int __stdcall wWinMain() {
+int main(int argc, char** argv) {
 #endif // !DEBUG
 
 #ifdef DEBUG
@@ -32,28 +20,34 @@ int main() {
 
 	subway::subway * tt = new subway::subway(std::string("./beijing-subway.txt"));
 #ifndef DEBUG
-	if (__argc == 2 && std::wstring(__targv[1]) == std::wstring(L"-g")) {
+	if (argc == 2 && !strcmp(argv[1], "-g")) {
 		Application::EnableVisualStyles();
 		Application::Run(gcnew mainView(tt));
 	}
-	else {		
-		AllocConsole();
-		//HMODULE hKernel32 = GetModuleHandle(L"kernel32");
-		//GetConsoleWindow = (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32, "GetConsoleWindow");
-		//HWND cmd = GetConsoleWindow();
-		//tt->do_c(std::string("Öª´ºÂ·"), std::string("É³ºÓ"));
-		if (__argc == 4 && std::wstring(__targv[1]) == std::wstring(L"-b")) {
-			std::wstring s(__targv[2]);
-			std::wstring t(__targv[3]);
-			printf("-b %s %s\n",s.c_str(), t.c_str());
+	else {
+		int flag = 0;
+		if (argc == 4 && !strcmp(argv[1],"-b")) {
+			std::string s(argv[2]);
+			std::string t(argv[3]);
+			if (!tt->do_b(s, t)) {
+				flag = 1;
+			}
 		}
-		else if (__argc == 4 && std::wstring(__targv[1]) == std::wstring(L"-c")) {
-			std::wstring s(__targv[2]);
-			std::wstring t(__targv[3]);
-			printf("-c %s %s\n", s.c_str(), t.c_str());
+		else if (argc == 4 && !strcmp(argv[1], "-c")) {
+			std::string s(argv[2]);
+			std::string t(argv[3]);
+			if (!tt->do_c(s, t)) {
+				flag = 1;
+			}
 		}
 		else printf("Invalid Input.\n");
+		if (flag) {
+			printf("stations: %d, transfer: %d\n",tt->getPlanNums().first, tt->getPlanNums().second);
+			for (int i = 0; i < tt->getCount(); ++i) {
+				printf("%s\n",tt->getStep(i).c_str());
+			}
 		}
+	}
 #endif // !DEBUG
 
 #ifdef DEBUG
