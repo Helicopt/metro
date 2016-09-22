@@ -15,43 +15,43 @@ int main(int argc, char** argv) {
 #endif // !DEBUG
 
 #ifdef DEBUG
-int main() {
+	int main() {
 #endif // DEBUG
 
-	subway::subway * tt = new subway::subway(std::string("./beijing-subway.txt"));
+		subway::subway * tt = new subway::subway(std::string("./beijing-subway.txt"));
 #ifndef DEBUG
-	if (argc == 2 && !strcmp(argv[1], "-g")) {
-		Application::EnableVisualStyles();
-		Application::Run(gcnew mainView(tt));
-	}
-	else {
-		int flag = 0;
-		if (argc == 4 && !strcmp(argv[1],"-b")) {
-			std::string s(argv[2]);
-			std::string t(argv[3]);
-			if (!tt->do_b(s, t)) {
-				flag = 1;
+		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
+			Application::EnableVisualStyles();
+			Application::Run(gcnew mainView(tt));
+		}
+		else {
+			int flag = 0;
+			if (argc == 4 && !strcmp(argv[1], "-b")) {
+				std::string s(argv[2]);
+				std::string t(argv[3]);
+				if (!tt->do_b(s, t)) {
+					flag = 1;
+				}
+			}
+			else if (argc == 4 && !strcmp(argv[1], "-c")) {
+				std::string s(argv[2]);
+				std::string t(argv[3]);
+				if (!tt->do_c(s, t)) {
+					flag = 1;
+				}
+			}
+			else printf("Invalid Input.\n");
+			if (flag) {
+				printf("stations: %d, transfer: %d\n", tt->getPlanNums().first, tt->getPlanNums().second);
+				for (int i = 0; i < tt->getCount(); ++i) {
+					printf("%s\n", tt->getStep(i).c_str());
+				}
 			}
 		}
-		else if (argc == 4 && !strcmp(argv[1], "-c")) {
-			std::string s(argv[2]);
-			std::string t(argv[3]);
-			if (!tt->do_c(s, t)) {
-				flag = 1;
-			}
-		}
-		else printf("Invalid Input.\n");
-		if (flag) {
-			printf("stations: %d, transfer: %d\n",tt->getPlanNums().first, tt->getPlanNums().second);
-			for (int i = 0; i < tt->getCount(); ++i) {
-				printf("%s\n",tt->getStep(i).c_str());
-			}
-		}
-	}
 #endif // !DEBUG
 
 #ifdef DEBUG
-	tt->do_c(std::string("知春路"),std::string("沙河"));
+		tt->do_c(std::string("知春路"), std::string("沙河"));
 #endif //DEBUG
-	return 0;
+		return 0;
 }
