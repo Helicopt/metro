@@ -37,6 +37,11 @@ namespace subway {
 		int status;
 	}L;
 
+	struct Exc {
+		std::string info;
+		Exc(std::string info) : info(info) {}
+	};
+
 	enum planMode {pm_Short, pm_convi};
 
 	class subway {
@@ -117,14 +122,18 @@ namespace subway {
 
 			fopen_s(&f, this->dataPath.c_str(), "r");
 			if (f == NULL) {
-				fprintf_s(stderr,"map data cannot be loaded. (path: %s)\n",this->dataPath.c_str());
-				return 1;
+				throw new Exc(string("Map data cannot be loaded. (path: ") + this->dataPath + string(")"));
+				//fprintf_s(stderr,"map data cannot be loaded. (path: %s)\n",this->dataPath.c_str());
+				//return 1;
 			}
 			int n;
-			fscanf_s(f, "%d", &n);
-
+			if (fscanf_s(f, "%d", &n) != 1) {
+				throw new Exc("Bad File: excepted the number of stations in the beginning");
+			}
 			for (int i = 0; i < n; ++i) {
-				fscanf_s(f, "%s", s, 64);
+				if (fscanf_s(f, "%s", s, 64) != 1) {
+					throw new Exc("Bad File: insufficient stations");
+				}
 				s[63] = '\0';
 				this->create_station(std::string(s),0,0);
 			}
@@ -136,14 +145,18 @@ namespace subway {
 				aline->status = 0;
 				aline->d.clear();
 				int k;
-				fscanf_s(f, "%d", &k);
+				if (fscanf_s(f, "%d", &k) != 1) {
+					throw new Exc("Bad File: 3");
+				}
 				//fprintf_s(stderr, "loading %d stations\n", k);
 				int tp = k < 0;
 				k = abs(k);
 				aline->status = tp;
 
 				for (int i = 1; i <= k; ++i) {
-					fscanf_s(f, "%s", s, 64);
+					if (fscanf_s(f, "%s", s, 64) != 1) {
+						throw new Exc("Bad File: 4");
+					}
 					//fprintf_s(stderr, "dealing with %s\n", s);
 					s[63] = '\0';
 					bool ow = false;
@@ -301,9 +314,18 @@ namespace subway {
 			this->log.clear();
 			this->tot = 0;
 			this->idn = 0;
-			if (this->initialize()) {
+			try
+			{
+				this->initialize();
+			}
+			catch (const Exc* E)
+			{
+				fprintf_s(stderr, E->info.c_str());
 				exit(1);
 			}
+			/*if (this->initialize()) {
+				exit(1);
+			}*/
 		}
 
 		int do_b(std::string s, std::string t) {
