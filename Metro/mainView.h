@@ -23,8 +23,9 @@ namespace Metro {
 	public ref class mainView : public System::Windows::Forms::Form
 	{
 	public:
-		mainView(void)
+		mainView(subway::subway *subw)
 		{
+			this->sd = subw;
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -183,7 +184,7 @@ namespace Metro {
 		return System::Runtime::InteropServices::Marshal::PtrToStringAnsi((IntPtr)(char*)ch);
 	}
 	private: System::Void mainView_Load(System::Object^  sender, System::EventArgs^  e) {
-		this->sd = new subway::subway(std::string("./beijing-subway.txt"));
+		//this->sd = new subway::subway(std::string("./beijing-subway.txt"));
 		this->textBox1->Text = "Öª´ºÂ·";
 		this->textBox2->Text = "É³ºÓ";
 		this->pm = subway::pm_Short;

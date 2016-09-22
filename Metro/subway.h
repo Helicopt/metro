@@ -66,7 +66,7 @@ namespace subway {
 		int create_station(std::string nm, double x, double y) {
 			int id;
 			if (this->mp.find(nm) == this->mp.end()) {
-				id = this->Stations.size();
+				id = (int)this->Stations.size();
 				St *S = new St();
 				S->nm = nm;
 				S->sx = x;
@@ -85,12 +85,12 @@ namespace subway {
 				id = this->mp[nm];
 			else return -1;
 			if (add) {
-				tid = this->Trans.size();
+				tid = (int)this->Trans.size();
 				Tr *T = new Tr();
 				T->id = id;
 				T->l = lno;
 				T->g[0] = T->g[1] = 0;
-				int cnt = this->Stations[id]->trs.size();
+				int cnt = (int)this->Stations[id]->trs.size();
 				this->Stations[id]->trs.push_back(tid);
 				this->Trans.push_back(T);
 				for (int i = 0; i < cnt; ++i) {
@@ -100,7 +100,7 @@ namespace subway {
 				return tid;
 			}
 			else {
-				int cnt = this->Stations[id]->trs.size();
+				int cnt = (int)this->Stations[id]->trs.size();
 				for (int i = 0; i < cnt; ++i) {
 					tid = this->Stations[id]->trs[i];
 					if (this->Trans[tid]->l == lno) {
@@ -152,7 +152,7 @@ namespace subway {
 						ow = true;
 					}
 					std::string tname(s);
-					int id = this->add_station(s, this->lines.size());
+					int id = this->add_station(s, (int)this->lines.size());
 					aline->d.push_back(id);
 					if (i > 1) {
 						this->addE(aline->d[aline->d.size() - 2], aline->d[aline->d.size() - 1], ow ? 0 : (tot + 2), 0);
@@ -168,7 +168,7 @@ namespace subway {
 						s[strlen(s) - 1] = '\0';
 						ow = true;
 					}
-					int cyc = this->add_station(std::string(s), this->lines.size(), false);
+					int cyc = this->add_station(std::string(s), (int)this->lines.size(), false);
 					this->addE(aline->d.back(), cyc, ow ? 0 : (tot + 2), 0);
 					if (ow == false)
 						this->addE(cyc, aline->d.back(), tot, 0);
@@ -182,22 +182,22 @@ namespace subway {
 		void print_plan(PA re) {
 			this->lastAns = re;
 			this->log.clear();
-			int cnt = this->ansq.size();
+			int cnt = (int)this->ansq.size();
 			int pre = -1;
 			for (int i = 1; i <= cnt; ++i) {
 				int t = this->ansq[cnt - i];
 				std::string &nm = this->Stations[this->Trans[t]->id]->nm;
 				std::string tmp(nm.c_str());
-				printf_s("%s", nm.c_str());
+				//printf_s("%s", nm.c_str());
 				if (pre >= 0) {
 					int lno = this->Trans[t]->l;
 					if (lno != this->Trans[pre]->l) {
-						printf_s("%s%s", transfer, this->lines[lno]->nm.c_str());
+						//printf_s("%s%s", transfer, this->lines[lno]->nm.c_str());
 						tmp = std::string(transfer) + std::string(this->lines[lno]->nm.c_str());
 					}
 				}
 				pre = t;
-				printf_s("\n");
+				//printf_s("\n");
 				this->log.push_back(tmp);
 			}
 		}
@@ -330,7 +330,7 @@ namespace subway {
 		}
 
 		int getCount() {
-			return this->log.size();
+			return (int)this->log.size();
 		}
 
 		PA getPlanNums() {
