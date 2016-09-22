@@ -40,12 +40,13 @@ namespace subway {
 	struct Exc {
 		std::string info;
 		Exc(std::string info) : info(info) {}
+		Exc(char* info) : info(string(info)) {}
 	};
 
-	enum planMode {pm_Short, pm_convi};
+	enum planMode { pm_Short, pm_convi };
 
 	class subway {
-	
+
 	private:
 		std::string dataPath;
 		std::map<std::string, int> mp;
@@ -116,13 +117,11 @@ namespace subway {
 			}
 		}
 
-		int initialize() {
-			FILE *f;
+		int initialize(FILE *f) {
 			char s[128];
 
-			fopen_s(&f, this->dataPath.c_str(), "r");
 			if (f == NULL) {
-				throw new Exc(string("Map data cannot be loaded. (path: ") + this->dataPath + string(")"));
+				throw new Exc("Map data cannot be loaded. (path: " + this->dataPath + ")");
 				//fprintf_s(stderr,"map data cannot be loaded. (path: %s)\n",this->dataPath.c_str());
 				//return 1;
 			}
@@ -135,7 +134,7 @@ namespace subway {
 					throw new Exc("Bad File: insufficient stations");
 				}
 				s[63] = '\0';
-				this->create_station(std::string(s),0,0);
+				this->create_station(std::string(s), 0, 0);
 			}
 			while (fscanf_s(f, "%s", s, 64) != EOF) {
 				//fprintf_s(stderr, "dealing with %s\n", s);
@@ -146,7 +145,7 @@ namespace subway {
 				aline->d.clear();
 				int k;
 				if (fscanf_s(f, "%d", &k) != 1) {
-					throw new Exc("Bad File: 3");
+					throw new Exc(string("Bad File: excepted the number of stations of ") + s);
 				}
 				//fprintf_s(stderr, "loading %d stations\n", k);
 				int tp = k < 0;
@@ -155,7 +154,7 @@ namespace subway {
 
 				for (int i = 1; i <= k; ++i) {
 					if (fscanf_s(f, "%s", s, 64) != 1) {
-						throw new Exc("Bad File: 4");
+						throw new Exc(string("Bad File: lack stations of ") + s);
 					}
 					//fprintf_s(stderr, "dealing with %s\n", s);
 					s[63] = '\0';
@@ -166,6 +165,9 @@ namespace subway {
 					}
 					std::string tname(s);
 					int id = this->add_station(s, (int)this->lines.size());
+					if (id < 0) {
+						throw new Exc(string("Can't find the station ") + tname);
+					}
 					aline->d.push_back(id);
 					if (i > 1) {
 						this->addE(aline->d[aline->d.size() - 2], aline->d[aline->d.size() - 1], ow ? 0 : (tot + 2), 0);
@@ -174,7 +176,9 @@ namespace subway {
 					}
 				}
 				if (tp) {
-					fscanf_s(f, "%s", s, 64);
+					if (fscanf_s(f, "%s", s, 64) != 1) {
+						throw new Exc("Bad File: " + aline->nm + " is not a cycle");
+					}
 					s[63] = '\0';
 					bool ow = false;
 					if (s[strlen(s) - 1] == '*') {
@@ -182,13 +186,15 @@ namespace subway {
 						ow = true;
 					}
 					int cyc = this->add_station(std::string(s), (int)this->lines.size(), false);
+					if (cyc < 0) {
+						throw new Exc("Bad File: " + aline->nm + " is not a cycle");
+					}
 					this->addE(aline->d.back(), cyc, ow ? 0 : (tot + 2), 0);
 					if (ow == false)
 						this->addE(cyc, aline->d.back(), tot, 0);
 				}
 				this->lines.push_back(aline);
 			}
-			fclose(f);
 			return 0;
 		}
 
@@ -314,17 +320,23 @@ namespace subway {
 			this->log.clear();
 			this->tot = 0;
 			this->idn = 0;
+			FILE *f;
 			try
 			{
-				this->initialize();
+				fopen_s(&f, this->dataPath.c_str(), "r");
+				this->initialize(f);
 			}
 			catch (const Exc* E)
 			{
-				fprintf_s(stderr, E->info.c_str());
+				fprintf_s(stderr, "%s\n", E->info.c_str());
+				if (f != NULL) {
+					fclose(f);
+				}
 				exit(1);
 			}
+			fclose(f);
 			/*if (this->initialize()) {
-				exit(1);
+			exit(1);
 			}*/
 		}
 
@@ -332,7 +344,7 @@ namespace subway {
 			if (this->mp.find(s) == this->mp.end() || this->mp.find(t) == this->mp.end()) return 1;
 			int src = this->mp[s];
 			int tar = this->mp[t];
-			PA &tmp=this->bfs(src, tar, planMode::pm_Short);
+			PA &tmp = this->bfs(src, tar, planMode::pm_Short);
 			this->print_plan(tmp);
 			return 0;
 		}
