@@ -1,6 +1,7 @@
 #define DEBUG 1
 #undef DEBUG
 #include<stdio.h>
+#include<windows.h>
 #include "mainView.h"
 
 #ifdef DEBUG
@@ -23,6 +24,12 @@ int main(int argc, char** argv) {
 		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
 			Application::EnableVisualStyles();
 			Application::Run(gcnew mainView(tt));
+			HWND hwnd;
+			hwnd = FindWindow(L"ConsoleWindowClass", NULL);
+			if (hwnd) {
+				ShowOwnedPopups(hwnd, SW_HIDE);
+				ShowWindow(hwnd, SW_HIDE);
+			}
 		}
 		else {
 			int flag = 0;
