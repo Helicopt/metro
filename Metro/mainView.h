@@ -65,6 +65,7 @@ namespace Metro {
 	private: System::Windows::Forms::ToolStripMenuItem^  设置为起点ToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  设置为终点ToolStripMenuItem;
 	private: System::Windows::Forms::TrackBar^  trackBar1;
+	private: System::Windows::Forms::RadioButton^  radioButton3;
 
 
 
@@ -100,6 +101,7 @@ namespace Metro {
 			this->设置为起点ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->设置为终点ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
+			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
@@ -107,7 +109,7 @@ namespace Metro {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(12, 220);
+			this->button1->Location = System::Drawing::Point(12, 229);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(103, 31);
 			this->button1->TabIndex = 0;
@@ -117,7 +119,7 @@ namespace Metro {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(63, 129);
+			this->textBox1->Location = System::Drawing::Point(45, 138);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(98, 21);
 			this->textBox1->TabIndex = 1;
@@ -125,7 +127,7 @@ namespace Metro {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(10, 132);
+			this->label1->Location = System::Drawing::Point(10, 141);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(29, 12);
 			this->label1->TabIndex = 2;
@@ -134,7 +136,7 @@ namespace Metro {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(10, 179);
+			this->label2->Location = System::Drawing::Point(10, 188);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(29, 12);
 			this->label2->TabIndex = 4;
@@ -142,7 +144,7 @@ namespace Metro {
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(63, 176);
+			this->textBox2->Location = System::Drawing::Point(45, 185);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(98, 21);
 			this->textBox2->TabIndex = 3;
@@ -151,10 +153,11 @@ namespace Metro {
 			// 
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 12;
-			this->listBox1->Location = System::Drawing::Point(167, 68);
+			this->listBox1->Location = System::Drawing::Point(149, 68);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(126, 316);
+			this->listBox1->Size = System::Drawing::Size(144, 316);
 			this->listBox1->TabIndex = 5;
+			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &mainView::listBox1_SelectedIndexChanged);
 			// 
 			// radioButton1
 			// 
@@ -171,7 +174,7 @@ namespace Metro {
 			// radioButton2
 			// 
 			this->radioButton2->AutoSize = true;
-			this->radioButton2->Location = System::Drawing::Point(102, 104);
+			this->radioButton2->Location = System::Drawing::Point(77, 104);
 			this->radioButton2->Name = L"radioButton2";
 			this->radioButton2->Size = System::Drawing::Size(59, 16);
 			this->radioButton2->TabIndex = 7;
@@ -222,18 +225,33 @@ namespace Metro {
 			// trackBar1
 			// 
 			this->trackBar1->LargeChange = 3;
-			this->trackBar1->Location = System::Drawing::Point(289, 406);
+			this->trackBar1->Location = System::Drawing::Point(574, 406);
 			this->trackBar1->Maximum = 7;
 			this->trackBar1->Name = L"trackBar1";
+			this->trackBar1->RightToLeft = System::Windows::Forms::RightToLeft::Yes;
 			this->trackBar1->Size = System::Drawing::Size(207, 45);
 			this->trackBar1->TabIndex = 9;
+			this->trackBar1->Value = 7;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &mainView::trackBar1_Scroll);
+			// 
+			// radioButton3
+			// 
+			this->radioButton3->AutoSize = true;
+			this->radioButton3->Location = System::Drawing::Point(12, 68);
+			this->radioButton3->Name = L"radioButton3";
+			this->radioButton3->Size = System::Drawing::Size(71, 16);
+			this->radioButton3->TabIndex = 10;
+			this->radioButton3->TabStop = true;
+			this->radioButton3->Text = L"周游一圈";
+			this->radioButton3->UseVisualStyleBackColor = true;
+			this->radioButton3->CheckedChanged += gcnew System::EventHandler(this, &mainView::radioButton3_CheckedChanged);
 			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(787, 447);
+			this->Controls->Add(this->radioButton3);
 			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->radioButton2);
@@ -339,7 +357,8 @@ namespace Metro {
 		this->listBox1->Items->Clear();
 		this->button1->Enabled = false;
 		int flag;
-		if (this->pm == subway::pm_convi) flag = this->sd->do_c(*s, *t);
+		if (this->textBox2->Enabled == false) flag = this->sd->do_a(*s);
+		else if (this->pm == subway::pm_convi) flag = this->sd->do_c(*s, *t);
 		else if (this->pm == subway::pm_Short) flag = this->sd->do_b(*s, *t);
 		if (flag == 0) {
 			this->listBox1->Items->Add("站数：" + Convert::ToString(this->sd->getPlanNums().first) + "， 换乘次数：" + Convert::ToString(this->sd->getPlanNums().second));
@@ -354,9 +373,14 @@ namespace Metro {
 	}
 	private: System::Void radioButton1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 		this->pm = subway::pm_convi;
+		this->textBox2->Enabled = true;
 	}
 	private: System::Void radioButton2_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 		this->pm = subway::pm_Short;
+		this->textBox2->Enabled = true;
+	}
+	private: System::Void radioButton3_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+		this->textBox2->Enabled = false;
 	}
 	private: System::Void pictureBox1_Click(System::Object^  sender, System::EventArgs^  e) {
 	}
@@ -408,7 +432,9 @@ namespace Metro {
 		}
 	}
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
-		this->setScale(1.0-0.1*(this->trackBar1->Value));
+		this->setScale(0.4+0.1*(this->trackBar1->Value));
 	}
+private: System::Void listBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+}
 };
 }
