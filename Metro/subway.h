@@ -49,7 +49,7 @@ namespace subway {
 
 	private:
 		std::string dataPath;
-		std::map<std::string, int> mp;
+		std::map<std::string, int> mp;	//name to id
 		std::vector<St*> Stations;
 		std::vector<Tr*> Trans;
 		std::vector<L*> lines;
@@ -299,6 +299,109 @@ namespace subway {
 			}
 			return PA(ss, tt);
 		}
+		
+		int **dis, **prev;
+		int *alt, altn;
+		int cnt = 0, cycle_ans = inf, cycle_res[maxE];
+		void add(int s, int t, int loc)
+		{
+			while (t != -1) {
+				cycle_res[loc + dis[s][t]] = t;
+				t = prev[s][t];
+			}
+		}
+		bool dfs(int v, int d)
+		{
+			if (cnt > 9137777) {
+				return false;
+			}
+			cnt++;
+			if (altn == 0) {
+				if (d + dis[v][0] < cycle_ans) {
+					cycle_ans = d + dis[v][0];
+					add(v, 0, d);
+					//cout << "find at " << clock()  / 1000. << "s, " << cnt << ": " << cycle_ans << endl;
+					return true;
+				}
+				return false;
+			}
+			vector<int> bk;
+			int md = inf;
+			for (int i = 0; i < altn; i++) {
+				if (dis[v][alt[i]] < md) {
+					md = dis[v][alt[i]];
+					bk.clear();
+					bk.push_back(i);
+				}
+				else if (dis[v][alt[i]] == md) {
+					bk.push_back(i);
+				}
+			}
+			bool flag = false;
+			for (int i = 0; i < bk.size(); i++) {
+				int tmp = alt[bk[i]];
+				alt[bk[i]] = alt[--altn];
+				if (dfs(tmp, d + dis[v][tmp])) {
+					add(v, tmp, d);
+					flag = true;
+				}
+				alt[altn++] = alt[bk[i]];
+				alt[bk[i]] = tmp;
+			}
+			return flag;
+		}
+		void getCycle()
+		{
+			int *q;
+			dis = (int**)malloc(sizeof(int*) * this->Stations.size());
+			dis[0] = (int*)malloc(sizeof(int) * this->Stations.size() * this->Stations.size());
+			prev = (int**)malloc(sizeof(int*) * this->Stations.size());
+			prev[0] = (int*)malloc(sizeof(int) * this->Stations.size() * this->Stations.size());
+			q = (int*)malloc(sizeof(int) * maxE);
+			for (int i = 1; i < this->Stations.size(); i++) {
+				dis[i] = dis[i - 1] + this->Stations.size();
+			}
+			for (int i = 1; i < this->Stations.size(); i++) {
+				prev[i] = prev[i - 1] + this->Stations.size();
+			}
+			memset(dis[0], 0x3e, sizeof(int) * (this->Stations.size()) * (this->Stations.size()));
+			memset(prev[0], -1, sizeof(int) * (this->Stations.size()) * (this->Stations.size()));
+
+			for (int s = 0; s < this->Stations.size(); s++) {
+				int head = 0, tail = 0;
+				dis[s][s] = 0;
+				q[tail++] = s;
+				while (head < tail) {
+					int x = q[head++];
+					for (int i = 0; i < this->Stations[x]->trs.size(); i++) {
+						int xi = this->Stations[x]->trs[i];
+						for (int j = this->Trans[xi]->g[0]; j != 0; j = e[j].nxt) {
+							int v = Trans[e[j].a]->id;
+							if (dis[s][v] > dis[s][x] + 1) {
+								dis[s][v] = dis[s][x] + 1;
+								prev[s][v] = x;
+								q[tail++] = v;
+							}
+						}
+					}
+
+				}
+			}
+
+			alt = (int*)malloc(sizeof(int) * this->Stations.size());
+			altn = 0;
+			for (int i = 1; i < this->Stations.size(); i++) {
+				alt[altn++] = i;
+			}
+			dfs(0, 0);
+			int asd = 1;
+			/*free(dis[0]);
+			free(dis);
+			free(prev[0]);
+			free(prev);
+			free(alt);
+			free(q);*/
+		}
 
 	protected:
 		~subway() {
@@ -338,6 +441,62 @@ namespace subway {
 			/*if (this->initialize()) {
 			exit(1);
 			}*/
+		}
+
+		int do_a(std::string s) {
+			if (this->mp.find(s) == this->mp.end()) return 1;
+			int src = this->mp[s];
+			if (cycle_ans == inf) {
+				this->getCycle();
+			}
+			for (int i = 0; i < cycle_ans; i++) {
+				if (cycle_res[i] == src) {
+					src = i;
+					break;
+				}
+			}
+			ansq.clear();
+			int pret, pv = cycle_res[src];
+			int v = cycle_res[(1 + src) % cycle_ans];
+			for (int j = 0; j < Stations[pv]->trs.size(); j++) {
+				int x = Stations[pv]->trs[j];
+				for (int k = 0; k < Stations[v]->trs.size(); k++) {
+					int y = Stations[v]->trs[k];
+					if (Trans[x]->l == Trans[y]->l) {
+						pret = x;
+						ansq.push_back(x);
+						break;
+					}
+				}
+				if (ansq.size()) {
+					break;
+				}
+			}
+			for (int i = 1; i <= cycle_ans; i++) {
+				bool flag = false;
+				int a = -1, b = -1;
+				v = cycle_res[(i + src) % cycle_ans];
+				for (int j = 0; j < Stations[pv]->trs.size(); j++) {
+					int x = Stations[pv]->trs[j];
+					for (int k = 0; k < Stations[v]->trs.size(); k++) {
+						int y = Stations[v]->trs[k];
+						if (Trans[x]->l == Trans[y]->l) {
+							a = x;
+							b = y;
+						}
+					}
+					if (a == pret) {
+						break;
+					}
+				}
+				if (a != pret) {
+					ansq.push_back(a);
+				}
+				ansq.push_back(b);
+				pret = b;
+				pv = v;
+			}
+			print_plan(PA(cycle_ans, ansq.size() - cycle_ans - 1));
 		}
 
 		int do_b(std::string s, std::string t) {
