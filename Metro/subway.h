@@ -530,5 +530,14 @@ namespace subway {
 			return this->lastAns;
 		}
 
+		int stationCount() {
+			return this->Stations.size();
+		}
+
+		std::string getStation(int id) {
+			if (id < 0 || id >= this->Stations.size()) return "";
+			else return this->Stations[id]->nm;
+		}
+
 	};
 }
