@@ -8,6 +8,8 @@
 #include "subway.h"
 //using namespace subway;
 
+#define MIN_SIZE 0.3
+
 namespace Metro {
 
 	using namespace System;
@@ -52,7 +54,7 @@ namespace Metro {
 
 	private: subway::subway * sd;
 	private: subway::planMode pm;
-	private: System::Drawing::Bitmap ^ bm;
+	private: System::Drawing::Bitmap ^ bm, ^src;
 	private: Graphics^ gh;
 	private: int pbW, pbH;
 
@@ -62,6 +64,7 @@ namespace Metro {
 	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  设置为起点ToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  设置为终点ToolStripMenuItem;
+	private: System::Windows::Forms::TrackBar^  trackBar1;
 
 
 
@@ -96,8 +99,10 @@ namespace Metro {
 			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->设置为起点ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->设置为终点ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -181,7 +186,7 @@ namespace Metro {
 			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(299, 30);
+			this->pictureBox1->Location = System::Drawing::Point(299, 12);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(482, 388);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
@@ -192,7 +197,7 @@ namespace Metro {
 			this->pictureBox1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::pictureBox1_MouseMove);
 			this->pictureBox1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::pictureBox1_MouseUp);
 			this->pictureBox1->MouseWheel += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::pictureBox1_MouseWheel);
-				// 
+			// 
 			// contextMenuStrip1
 			// 
 			this->contextMenuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
@@ -200,25 +205,36 @@ namespace Metro {
 					this->设置为终点ToolStripMenuItem
 			});
 			this->contextMenuStrip1->Name = L"contextMenuStrip1";
-			this->contextMenuStrip1->Size = System::Drawing::Size(153, 70);
+			this->contextMenuStrip1->Size = System::Drawing::Size(137, 48);
 			// 
 			// 设置为起点ToolStripMenuItem
 			// 
 			this->设置为起点ToolStripMenuItem->Name = L"设置为起点ToolStripMenuItem";
-			this->设置为起点ToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->设置为起点ToolStripMenuItem->Size = System::Drawing::Size(136, 22);
 			this->设置为起点ToolStripMenuItem->Text = L"设置为起点";
 			// 
 			// 设置为终点ToolStripMenuItem
 			// 
 			this->设置为终点ToolStripMenuItem->Name = L"设置为终点ToolStripMenuItem";
-			this->设置为终点ToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->设置为终点ToolStripMenuItem->Size = System::Drawing::Size(136, 22);
 			this->设置为终点ToolStripMenuItem->Text = L"设置为终点";
+			// 
+			// trackBar1
+			// 
+			this->trackBar1->LargeChange = 3;
+			this->trackBar1->Location = System::Drawing::Point(289, 406);
+			this->trackBar1->Maximum = 7;
+			this->trackBar1->Name = L"trackBar1";
+			this->trackBar1->Size = System::Drawing::Size(207, 45);
+			this->trackBar1->TabIndex = 9;
+			this->trackBar1->Scroll += gcnew System::EventHandler(this, &mainView::trackBar1_Scroll);
 			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(787, 447);
+			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->radioButton1);
@@ -234,6 +250,7 @@ namespace Metro {
 			this->Load += gcnew System::EventHandler(this, &mainView::mainView_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->contextMenuStrip1->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -252,12 +269,14 @@ namespace Metro {
 		this->pm = subway::pm_Short;
 		this->radioButton2->Checked = true;
 		System::Drawing::Pen^ pen = gcnew System::Drawing::Pen(System::Drawing::Color::DarkSeaGreen);
-		this->bm = (Bitmap^)this->pictureBox1->Image;
+		this->src = (Bitmap^)this->pictureBox1->Image;
 		this->pbW = this->pictureBox1->Width;
 		this->pbH = this->pictureBox1->Height;
+		this->setScale(1);
+		this->adjustSize();
 		this->setCXY(589, 438, false);
 	}
-	private: int CX, CY;
+	private: int CX, CY, SCX, SCY;
 	private: float scale = 1.0;
 	private: void setCXY(int x, int y, bool delta) {
 		if (delta) {
@@ -268,12 +287,13 @@ namespace Metro {
 			this->CX = x;
 			this->CY = y;
 		}
+		this->SCX = (int)((float)this->CX / this->bm->Width*this->src->Width);
+		this->SCY = (int)((float)this->CY / this->bm->Height*this->src->Height);
 		this->showCenter();
-		if (this->scale <= 0.999999) this->adjustSize();
 	}
 
 	private: void setScale(float tmp) {
-		if (tmp < 0.4) tmp = 0.4;
+		if (tmp < MIN_SIZE) tmp = MIN_SIZE;
 		if (tmp > 1) tmp = 1;
 		if (fabs(tmp - this->scale)>=0.00001) {
 			this->scale = tmp;
@@ -282,23 +302,14 @@ namespace Metro {
 	}
 
 	private: bool adjustSize() {
-		int XX = (int)(this->bm->Width*this->scale);
-		int YY = (int)(this->bm->Height*this->scale);
-		int tcx = (int)(this->CX*this->scale);
-		int tcy = (int)(this->CY*this->scale);
-		Bitmap^bm2 = gcnew Bitmap(XX,YY);
-		Graphics ^gh2 = Graphics::FromImage(bm2);
-		gh2->DrawImage(bm, System::Drawing::Rectangle(0, 0, this->pbW, this->pbH), System::Drawing::Rectangle(0, 0, this->bm->Width, this->bm->Height), GraphicsUnit::Pixel);
-		int tx = tcx - this->pbW / 2;
-		int ty = tcy - this->pbH / 2;
-		int gx = 0, gy = 0;
-		if (tx < 0) gx = -tx, tx = 0;
-		if (ty < 0) gy = -ty, ty = 0;
-		Bitmap^ bmp = gcnew Bitmap(this->pbW, this->pbH);
-		this->gh = Graphics::FromImage(bmp);
-		this->gh->DrawImage(bm2, System::Drawing::Rectangle(tx, ty, this->pbW - gx, this->pbH - gy), System::Drawing::Rectangle(tx, ty, this->pbW - gx, this->pbH - gy), GraphicsUnit::Pixel);
-		this->pictureBox1->Image = bmp;
-		return true;
+		int XX = (int)(this->src->Width*this->scale);
+		int YY = (int)(this->src->Height*this->scale);
+		this->CX = (int)(this->SCX*this->scale);
+		this->CY = (int)(this->SCY*this->scale);
+		this->bm = gcnew Bitmap(XX,YY);
+		Graphics ^gh2 = Graphics::FromImage(bm);
+		gh2->DrawImage(this->src, System::Drawing::Rectangle(0, 0, XX, YY), System::Drawing::Rectangle(0, 0, this->src->Width, this->src->Height), GraphicsUnit::Pixel);
+		return this->showCenter();
 	}
 
 	private: bool showCenter() {
@@ -373,11 +384,12 @@ namespace Metro {
 		if (e->Delta > 0) tmp += 0.1;
 		else if (e->Delta < 0) tmp -= 0.1;
 		//System::Windows::Forms::MessageBox::Show("滑");
-		this->textBox1->Text = "滑";
+		//this->textBox1->Text = "滑";
 		this->setScale(tmp);
 
 	}
 	private: System::Void pictureBox1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		this->trackBar1->Focus();
 		if (this->Dragging) {
 			int dx = e->X - this->dPreX;
 			int dy = e->Y - this->dPreY;
@@ -395,5 +407,8 @@ namespace Metro {
 			}
 		}
 	}
-	};
+	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
+		this->setScale(1.0-0.1*(this->trackBar1->Value));
+	}
+};
 }
