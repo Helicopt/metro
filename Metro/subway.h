@@ -134,7 +134,11 @@ namespace subway {
 					throw new Exc("Bad File: insufficient stations");
 				}
 				s[63] = '\0';
-				this->create_station(std::string(s), 0, 0);
+				int xx, yy;
+				if (fscanf_s(f,"%d%d",&xx,&yy)!=2) {
+					throw new Exc("Bad File: expected numberic coordinates");
+				}
+				this->create_station(std::string(s), xx, yy);
 			}
 			while (fscanf_s(f, "%s", s, 64) != EOF) {
 				//fprintf_s(stderr, "dealing with %s\n", s);
@@ -537,6 +541,28 @@ namespace subway {
 		std::string getStation(int id) {
 			if (id < 0 || id >= this->Stations.size()) return "";
 			else return this->Stations[id]->nm;
+		}
+
+		std::string getNameByXY(PA pos) {
+			int d = inf, mi = -1;
+			for (int i = 0; i < this->Stations.size(); ++i) {
+				station * tmp = this->Stations[i];
+				int dis = (pos.first - tmp->sx)*(pos.first - tmp->sx) + (pos.second - tmp->sy)*(pos.second - tmp->sy);
+				if (dis < d) {
+					d = dis;
+					mi = i;
+				}
+			}
+			if (mi == -1) return ""; else return this->Stations[mi]->nm;
+		}
+
+		PA getXYByName(std::string nm) {
+			if (mp.find(nm) != mp.end()) {
+				int xx = this->Stations[mp[nm]]->sx;
+				int yy = this->Stations[mp[nm]]->sy;
+				return PA(xx, yy);
+			}
+			else return PA(-1, -1);
 		}
 
 	};

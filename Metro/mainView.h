@@ -66,6 +66,7 @@ namespace Metro {
 	private: System::Windows::Forms::ToolStripMenuItem^  设置为终点ToolStripMenuItem;
 	private: System::Windows::Forms::TrackBar^  trackBar1;
 	private: System::Windows::Forms::RadioButton^  radioButton3;
+	private: System::Windows::Forms::ImageList^  imageList1;
 
 
 
@@ -102,6 +103,7 @@ namespace Metro {
 			this->设置为终点ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
+			this->imageList1 = (gcnew System::Windows::Forms::ImageList(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
@@ -209,18 +211,21 @@ namespace Metro {
 			});
 			this->contextMenuStrip1->Name = L"contextMenuStrip1";
 			this->contextMenuStrip1->Size = System::Drawing::Size(137, 48);
+			this->contextMenuStrip1->Opening += gcnew System::ComponentModel::CancelEventHandler(this, &mainView::contextMenuStrip1_Opening);
 			// 
 			// 设置为起点ToolStripMenuItem
 			// 
 			this->设置为起点ToolStripMenuItem->Name = L"设置为起点ToolStripMenuItem";
 			this->设置为起点ToolStripMenuItem->Size = System::Drawing::Size(136, 22);
 			this->设置为起点ToolStripMenuItem->Text = L"设置为起点";
+			this->设置为起点ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::设置为起点ToolStripMenuItem_Click);
 			// 
 			// 设置为终点ToolStripMenuItem
 			// 
 			this->设置为终点ToolStripMenuItem->Name = L"设置为终点ToolStripMenuItem";
 			this->设置为终点ToolStripMenuItem->Size = System::Drawing::Size(136, 22);
 			this->设置为终点ToolStripMenuItem->Text = L"设置为终点";
+			this->设置为终点ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::设置为终点ToolStripMenuItem_Click);
 			// 
 			// trackBar1
 			// 
@@ -245,6 +250,14 @@ namespace Metro {
 			this->radioButton3->Text = L"周游一圈";
 			this->radioButton3->UseVisualStyleBackColor = true;
 			this->radioButton3->CheckedChanged += gcnew System::EventHandler(this, &mainView::radioButton3_CheckedChanged);
+			// 
+			// imageList1
+			// 
+			this->imageList1->ImageStream = (cli::safe_cast<System::Windows::Forms::ImageListStreamer^>(resources->GetObject(L"imageList1.ImageStream")));
+			this->imageList1->TransparentColor = System::Drawing::Color::Transparent;
+			this->imageList1->Images->SetKeyName(0, L"location.png");
+			this->imageList1->Images->SetKeyName(1, L"start.png");
+			this->imageList1->Images->SetKeyName(2, L"end.png");
 			// 
 			// mainView
 			// 
@@ -327,7 +340,7 @@ namespace Metro {
 		this->bm = gcnew Bitmap(XX,YY);
 		Graphics ^gh2 = Graphics::FromImage(bm);
 		gh2->DrawImage(this->src, System::Drawing::Rectangle(0, 0, XX, YY), System::Drawing::Rectangle(0, 0, this->src->Width, this->src->Height), GraphicsUnit::Pixel);
-		return this->showCenter();
+		return this->drawItem();
 	}
 
 	private: bool showCenter() {
@@ -439,6 +452,46 @@ namespace Metro {
 			this->contextMenuStrip1->Show(MousePosition);
 		}
 	}
+
+	private: bool hasSigned = false, hasBegin = false, hasEnd = false, hasRoute = false;
+
+	private: bool drawItem() {
+		if (hasSigned) {
+			int xx = this->SUX, yy = this->SUY;
+			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+			subway::PA tmp = this->sd->getXYByName(pname);
+			xx = tmp.first, yy = tmp.second;
+			Graphics ^gh2 = Graphics::FromImage(bm);
+			xx = (int)(xx*this->scale);
+			yy = (int)(yy*this->scale);
+			System::Drawing::Image^tima = this->imageList1->Images[0];
+			gh2->DrawImage(tima,System::Drawing::Rectangle(xx- tima->Width/2+3,yy- tima->Height,tima->Width,tima->Height));
+		}
+		if (hasBegin) {
+			int xx = this->BX, yy = this->BY;
+			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+			subway::PA tmp = this->sd->getXYByName(pname);
+			xx = tmp.first, yy = tmp.second;
+			Graphics ^gh2 = Graphics::FromImage(bm);
+			xx = (int)(xx*this->scale);
+			yy = (int)(yy*this->scale);
+			System::Drawing::Image^tima = this->imageList1->Images[1];
+			gh2->DrawImage(tima, System::Drawing::Rectangle(xx - tima->Width / 2 + 3, yy - tima->Height, tima->Width, tima->Height));
+		}
+		if (hasEnd) {
+			int xx = this->EX, yy = this->EY;
+			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+			subway::PA tmp = this->sd->getXYByName(pname);
+			xx = tmp.first, yy = tmp.second;
+			Graphics ^gh2 = Graphics::FromImage(bm);
+			xx = (int)(xx*this->scale);
+			yy = (int)(yy*this->scale);
+			System::Drawing::Image^tima = this->imageList1->Images[2];
+			gh2->DrawImage(tima, System::Drawing::Rectangle(xx - tima->Width / 2 + 3, yy - tima->Height, tima->Width, tima->Height));
+		}
+		return this->showCenter();
+	}
+
 	private: System::Void pictureBox1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		if (e->Button==System::Windows::Forms::MouseButtons::Left) this->Dragging = false;
 		if (this->Dragging == false) {
@@ -452,6 +505,10 @@ namespace Metro {
 				this->SUX = (int)((float)this->UX / this->bm->Width*this->src->Width);
 				this->SUY = (int)((float)this->UY / this->bm->Height*this->src->Height);
 				if (this->editMode) this->textBox2->Text = ("(" + Convert::ToString(this->SUX) + ", " + Convert::ToString(this->SUY) + ")");
+				if (this->editMode == 0&&e->Button== System::Windows::Forms::MouseButtons::Left) {
+					this->hasSigned = true;
+					this->adjustSize();
+				}
 			}
 		}
 	}
@@ -480,9 +537,35 @@ namespace Metro {
 		}
 	}
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
-		this->setScale(0.4+0.1*(this->trackBar1->Value));
+		this->setScale(0.3+0.1*(this->trackBar1->Value));
 	}
-private: System::Void listBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
-}
+	private: System::Void listBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
+	}
+	private: System::Void contextMenuStrip1_Opening(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) {
+	}
+	private: int BX, BY;
+	private: System::Void 设置为起点ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->hasSigned = false;
+		this->hasBegin = true;
+		this->BX = this->SUX;
+		this->BY = this->SUY;
+		int xx = this->BX;
+		int yy = this->BY;
+		std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+		this->textBox1->Text = this->SysString(pname.c_str());
+		this->adjustSize();
+	}
+	private: int EX, EY;
+	private: System::Void 设置为终点ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->hasSigned = false;
+		this->hasEnd = true;
+		this->EX = this->SUX;
+		this->EY = this->SUY;
+		int xx = this->EX;
+		int yy = this->EY;
+		std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+		this->textBox2->Text = this->SysString(pname.c_str());
+		this->adjustSize();
+	}
 };
 }
