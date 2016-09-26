@@ -348,8 +348,29 @@ namespace Metro {
 		this->pictureBox1->Image = bmp;
 		return true;
 	}
+	
+	private: subway::map<int,subway::PA>* tdm;
+	private: int editMode = 0;
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		
+		if (this->editMode != 0) {
+			int id = this->listBox1->SelectedIndex;
+			this->textBox1->Text = SysString(this->sd->getStation(id).c_str());
+			int xx = this->SUX, yy = this->SUY;
+			(*this->tdm)[id] = subway::PA(xx, yy);
+			this->textBox1->Text += Convert::ToString(this->tdm->size());
+			FILE* TF;
+			fopen_s(&TF,"points.txt","w");
+			for (int i = 0; i < this->sd->stationCount(); ++i) {
+				if (this->tdm->find(i) != this->tdm->end()) {
+					fprintf_s(TF,"%s %d %d\n", this->sd->getStation(id).c_str(),xx,yy);
+				}
+			}
+			fclose(TF);
+			return;
+		}//edit_Mode
+
 		System::String^ st1 = this->textBox1->Text;
 		System::String^ st2 = this->textBox2->Text;
 		std::string *s = this->stdString(st1);
@@ -370,6 +391,22 @@ namespace Metro {
 			this->listBox1->Items->Add("ÕÒ²»µ½Õ¾µã");
 		}
 		this->button1->Enabled = true;
+
+		if (*s == "TDM_toka"&&this->radioButton3->Checked) {
+			this->editMode = 1;
+			this->textBox1->Enabled = false;
+			this->textBox1->Enabled = false;
+			this->radioButton1->Enabled = false;
+			this->radioButton2->Enabled = false;
+			this->radioButton3->Enabled = false;
+			this->listBox1->Items->Clear();
+			int cnt = sd->stationCount();
+			for (int i = 0; i < cnt; ++i) {
+				this->listBox1->Items->Add(this->SysString(this->sd->getStation(i).c_str()));
+			}
+			this->tdm = new subway::map<int, subway::PA>();
+			this->tdm->clear();
+		}//edit_Mode
 	}
 	private: System::Void radioButton1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 		this->pm = subway::pm_convi;
@@ -402,6 +439,19 @@ namespace Metro {
 	}
 	private: System::Void pictureBox1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		if (e->Button==System::Windows::Forms::MouseButtons::Left) this->Dragging = false;
+		if (this->Dragging == false) {
+			int dx = abs(e->X - this->SX);
+			int dy = abs(e->Y - this->SY);
+			if (e->Button == System::Windows::Forms::MouseButtons::Right ||
+				e->Button == System::Windows::Forms::MouseButtons::Left&&dx < 3 && dy < 3) {
+				this->UX = e->X - this->pbW / 2 + this->CX;
+				this->UY = e->Y - this->pbH / 2 + this->CY;
+				if (this->editMode) this->textBox1->Text = ("(" + Convert::ToString(this->UX) + ", " + Convert::ToString(this->UY) + ")");
+				this->SUX = (int)((float)this->UX / this->bm->Width*this->src->Width);
+				this->SUY = (int)((float)this->UY / this->bm->Height*this->src->Height);
+				if (this->editMode) this->textBox2->Text = ("(" + Convert::ToString(this->SUX) + ", " + Convert::ToString(this->SUY) + ")");
+			}
+		}
 	}
 	private: System::Void pictureBox1_MouseWheel(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		float tmp = this->scale;
@@ -412,6 +462,8 @@ namespace Metro {
 		this->setScale(tmp);
 
 	}
+
+	private: int UX = 0, UY = 0, SUX = 0, SUY = 0;
 	private: System::Void pictureBox1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		this->trackBar1->Focus();
 		if (this->Dragging) {
@@ -422,13 +474,7 @@ namespace Metro {
 			this->dPreY = e->Y;
 		}
 		else {
-			int dx = abs(e->X - this->SX);
-			int dy = abs(e->Y - this->SY);
 			this->pictureBox1->ResetCursor();
-			if (e->Button == System::Windows::Forms::MouseButtons::Right ||
-				e->Button == System::Windows::Forms::MouseButtons::Left&&dx < 3 && dy < 3) {
-
-			}
 		}
 	}
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
