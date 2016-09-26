@@ -195,10 +195,6 @@ namespace subway {
 				}
 				this->lines.push_back(aline);
 			}
-			free(dis[0]);
-			free(dis[1]);
-			free(fa);
-			free(iq);
 			return 0;
 		}
 
@@ -301,6 +297,10 @@ namespace subway {
 				mi = fa[mi];
 				this->ansq.push_back(mi);
 			}
+			free(dis[0]);
+			free(dis[1]);
+			free(fa);
+			free(iq);
 			return PA(ss, tt);
 		}
 		
