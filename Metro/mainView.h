@@ -364,7 +364,9 @@ namespace Metro {
 			fopen_s(&TF,"points.txt","w");
 			for (int i = 0; i < this->sd->stationCount(); ++i) {
 				if (this->tdm->find(i) != this->tdm->end()) {
-					fprintf_s(TF,"%s %d %d\n", this->sd->getStation(id).c_str(),xx,yy);
+					xx = (*this->tdm)[i].first;
+					yy = (*this->tdm)[i].second;
+					fprintf_s(TF,"%s %d %d\n", this->sd->getStation(i).c_str(),xx,yy);
 				}
 			}
 			fclose(TF);
