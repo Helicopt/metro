@@ -70,6 +70,7 @@ namespace Metro {
 
 
 
+
 	private: System::ComponentModel::IContainer^  components;
 
 	protected:
@@ -155,11 +156,12 @@ namespace Metro {
 			// 
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 12;
-			this->listBox1->Location = System::Drawing::Point(149, 68);
+			this->listBox1->Location = System::Drawing::Point(149, 8);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(144, 316);
+			this->listBox1->Size = System::Drawing::Size(157, 460);
 			this->listBox1->TabIndex = 5;
 			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &mainView::listBox1_SelectedIndexChanged);
+			this->listBox1->DoubleClick += gcnew System::EventHandler(this, &mainView::listBox1_DoubleClick);
 			// 
 			// radioButton1
 			// 
@@ -191,9 +193,9 @@ namespace Metro {
 			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(299, 12);
+			this->pictureBox1->Location = System::Drawing::Point(312, 7);
 			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(482, 388);
+			this->pictureBox1->Size = System::Drawing::Size(628, 461);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->pictureBox1->TabIndex = 8;
 			this->pictureBox1->TabStop = false;
@@ -230,7 +232,7 @@ namespace Metro {
 			// trackBar1
 			// 
 			this->trackBar1->LargeChange = 3;
-			this->trackBar1->Location = System::Drawing::Point(574, 406);
+			this->trackBar1->Location = System::Drawing::Point(742, 474);
 			this->trackBar1->Maximum = 7;
 			this->trackBar1->Name = L"trackBar1";
 			this->trackBar1->RightToLeft = System::Windows::Forms::RightToLeft::Yes;
@@ -258,12 +260,15 @@ namespace Metro {
 			this->imageList1->Images->SetKeyName(0, L"location.png");
 			this->imageList1->Images->SetKeyName(1, L"start.png");
 			this->imageList1->Images->SetKeyName(2, L"end.png");
+			this->imageList1->Images->SetKeyName(3, L"mark1.png");
+			this->imageList1->Images->SetKeyName(4, L"mark2.png");
+			this->imageList1->Images->SetKeyName(5, L"mark3.png");
 			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(787, 447);
+			this->ClientSize = System::Drawing::Size(949, 510);
 			this->Controls->Add(this->radioButton3);
 			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
@@ -326,7 +331,7 @@ namespace Metro {
 	private: void setScale(float tmp) {
 		if (tmp < MIN_SIZE) tmp = MIN_SIZE;
 		if (tmp > 1) tmp = 1;
-		if (fabs(tmp - this->scale)>=0.00001) {
+		if (fabs(tmp - this->scale) >= 0.00001) {
 			this->scale = tmp;
 			this->adjustSize();
 		}
@@ -337,7 +342,7 @@ namespace Metro {
 		int YY = (int)(this->src->Height*this->scale);
 		this->CX = (int)(this->SCX*this->scale);
 		this->CY = (int)(this->SCY*this->scale);
-		this->bm = gcnew Bitmap(XX,YY);
+		this->bm = gcnew Bitmap(XX, YY);
 		Graphics ^gh2 = Graphics::FromImage(bm);
 		gh2->DrawImage(this->src, System::Drawing::Rectangle(0, 0, XX, YY), System::Drawing::Rectangle(0, 0, this->src->Width, this->src->Height), GraphicsUnit::Pixel);
 		return this->drawItem();
@@ -361,12 +366,13 @@ namespace Metro {
 		this->pictureBox1->Image = bmp;
 		return true;
 	}
-	
-	private: subway::map<int,subway::PA>* tdm;
+
+	private: subway::map<int, subway::PA>* tdm;
 	private: int editMode = 0;
+	private: int nowAt;
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		
+
 		if (this->editMode != 0) {
 			int id = this->listBox1->SelectedIndex;
 			this->textBox1->Text = SysString(this->sd->getStation(id).c_str());
@@ -374,12 +380,12 @@ namespace Metro {
 			(*this->tdm)[id] = subway::PA(xx, yy);
 			this->textBox1->Text += Convert::ToString(this->tdm->size());
 			FILE* TF;
-			fopen_s(&TF,"points.txt","w");
+			fopen_s(&TF, "points.txt", "w");
 			for (int i = 0; i < this->sd->stationCount(); ++i) {
 				if (this->tdm->find(i) != this->tdm->end()) {
 					xx = (*this->tdm)[i].first;
 					yy = (*this->tdm)[i].second;
-					fprintf_s(TF,"%s %d %d\n", this->sd->getStation(i).c_str(),xx,yy);
+					fprintf_s(TF, "%s %d %d\n", this->sd->getStation(i).c_str(), xx, yy);
 				}
 			}
 			fclose(TF);
@@ -401,9 +407,23 @@ namespace Metro {
 			for (int i = 0; i < this->sd->getCount(); ++i) {
 				this->listBox1->Items->Add(this->SysString(this->sd->getStep(i).c_str()));
 			}
+			this->listBox1->SelectedIndex = 1;
+			this->hasSigned = false;
+			this->hasRoute = true;
+			this->hasBegin = true;
+			this->hasEnd = true;
+			subway::PA be = this->sd->getXYByName(*(this->stdString(this->textBox1->Text))),
+				en = this->sd->getXYByName(*(this->stdString(this->textBox2->Text)));
+			this->BX = be.first, this->BY = be.second;
+			this->EX = en.first, this->EY = en.second;
+			this->nowAt = this->sd->getOriginalData(0);
+			this->adjustSize();
 		}
 		else {
 			this->listBox1->Items->Add("找不到站点");
+			this->hasRoute = false;
+			this->hasBegin = false;
+			this->hasEnd = false;
 		}
 		this->button1->Enabled = true;
 
@@ -437,7 +457,7 @@ namespace Metro {
 	private: System::Void pictureBox1_Click(System::Object^  sender, System::EventArgs^  e) {
 	}
 	private: bool Dragging = false;
-	private: int dPreX, dPreY, SX,SY;
+	private: int dPreX, dPreY, SX, SY;
 	private: System::Void pictureBox1_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		if (this->Dragging) return;
 		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
@@ -455,45 +475,54 @@ namespace Metro {
 
 	private: bool hasSigned = false, hasBegin = false, hasEnd = false, hasRoute = false;
 
+	private: void drawTag(int xx, int yy, int id) {
+		std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
+		subway::PA tmp = this->sd->getXYByName(pname);
+		xx = tmp.first, yy = tmp.second;
+		Graphics ^gh2 = Graphics::FromImage(bm);
+		xx = (int)(xx*this->scale);
+		yy = (int)(yy*this->scale);
+		System::Drawing::Image^tima = this->imageList1->Images[id];
+		gh2->DrawImage(tima, System::Drawing::Rectangle(xx - tima->Width / 2 + 3, yy - tima->Height, tima->Width, tima->Height));
+	}
+
 	private: bool drawItem() {
+		int no = 0;
+		if (hasRoute) {
+			int cnt = this->sd->getOriginalCNT();
+			for (int i = 0; i < cnt; ++i) {
+				int tmp = this->sd->getOriginalData(i);
+				int trflag = 0;
+				if (i > 0 && this->sd->getOriginalData(i - 1) == tmp) trflag = 1;
+				if (tmp == this->nowAt) no = 1;
+				if (i == 0 || i == cnt - 1) continue;
+				subway::PA p = this->sd->getXYByName(this->sd->getStation(tmp));
+				if (!no) {
+					this->drawTag(p.first, p.second, 4);
+				}
+				else {
+					if (!trflag) this->drawTag(p.first, p.second, 3);
+					else this->drawTag(p.first, p.second, 5);
+				}
+			}
+		}
 		if (hasSigned) {
 			int xx = this->SUX, yy = this->SUY;
-			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
-			subway::PA tmp = this->sd->getXYByName(pname);
-			xx = tmp.first, yy = tmp.second;
-			Graphics ^gh2 = Graphics::FromImage(bm);
-			xx = (int)(xx*this->scale);
-			yy = (int)(yy*this->scale);
-			System::Drawing::Image^tima = this->imageList1->Images[0];
-			gh2->DrawImage(tima,System::Drawing::Rectangle(xx- tima->Width/2+3,yy- tima->Height,tima->Width,tima->Height));
+			this->drawTag(xx, yy, 0);
 		}
 		if (hasBegin) {
 			int xx = this->BX, yy = this->BY;
-			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
-			subway::PA tmp = this->sd->getXYByName(pname);
-			xx = tmp.first, yy = tmp.second;
-			Graphics ^gh2 = Graphics::FromImage(bm);
-			xx = (int)(xx*this->scale);
-			yy = (int)(yy*this->scale);
-			System::Drawing::Image^tima = this->imageList1->Images[1];
-			gh2->DrawImage(tima, System::Drawing::Rectangle(xx - tima->Width / 2 + 3, yy - tima->Height, tima->Width, tima->Height));
+			this->drawTag(xx, yy, 1);
 		}
 		if (hasEnd) {
 			int xx = this->EX, yy = this->EY;
-			std::string pname = this->sd->getNameByXY(subway::PA(xx, yy));
-			subway::PA tmp = this->sd->getXYByName(pname);
-			xx = tmp.first, yy = tmp.second;
-			Graphics ^gh2 = Graphics::FromImage(bm);
-			xx = (int)(xx*this->scale);
-			yy = (int)(yy*this->scale);
-			System::Drawing::Image^tima = this->imageList1->Images[2];
-			gh2->DrawImage(tima, System::Drawing::Rectangle(xx - tima->Width / 2 + 3, yy - tima->Height, tima->Width, tima->Height));
+			this->drawTag(xx, yy, 2);
 		}
 		return this->showCenter();
 	}
 
 	private: System::Void pictureBox1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-		if (e->Button==System::Windows::Forms::MouseButtons::Left) this->Dragging = false;
+		if (e->Button == System::Windows::Forms::MouseButtons::Left) this->Dragging = false;
 		if (this->Dragging == false) {
 			int dx = abs(e->X - this->SX);
 			int dy = abs(e->Y - this->SY);
@@ -505,7 +534,7 @@ namespace Metro {
 				this->SUX = (int)((float)this->UX / this->bm->Width*this->src->Width);
 				this->SUY = (int)((float)this->UY / this->bm->Height*this->src->Height);
 				if (this->editMode) this->textBox2->Text = ("(" + Convert::ToString(this->SUX) + ", " + Convert::ToString(this->SUY) + ")");
-				if (this->editMode == 0&&e->Button== System::Windows::Forms::MouseButtons::Left) {
+				if (this->editMode == 0 && e->Button == System::Windows::Forms::MouseButtons::Left) {
 					this->hasSigned = true;
 					this->adjustSize();
 				}
@@ -537,7 +566,7 @@ namespace Metro {
 		}
 	}
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
-		this->setScale(0.3+0.1*(this->trackBar1->Value));
+		this->setScale(0.3 + 0.1*(this->trackBar1->Value));
 	}
 	private: System::Void listBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	}
@@ -547,6 +576,7 @@ namespace Metro {
 	private: System::Void 设置为起点ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->hasSigned = false;
 		this->hasBegin = true;
+		this->hasRoute = false;
 		this->BX = this->SUX;
 		this->BY = this->SUY;
 		int xx = this->BX;
@@ -559,6 +589,7 @@ namespace Metro {
 	private: System::Void 设置为终点ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->hasSigned = false;
 		this->hasEnd = true;
+		this->hasRoute = false;
 		this->EX = this->SUX;
 		this->EY = this->SUY;
 		int xx = this->EX;
@@ -567,5 +598,15 @@ namespace Metro {
 		this->textBox2->Text = this->SysString(pname.c_str());
 		this->adjustSize();
 	}
-};
+	private: System::Void listBox1_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
+		int id = this->listBox1->SelectedIndex;
+		if (id > 0 && this->listBox1->Items->Count) {
+			std::string * tmp = this->stdString((System::String^)this->listBox1->Items[id]);
+			int fnd = tmp->find(transfer);
+			if (fnd >= 0 && fnd < tmp->size()) --id, tmp = this->stdString((System::String^)this->listBox1->Items[id]);
+			this->nowAt = this->sd->getIDByName(tmp);
+			this->adjustSize();
+		}
+	}
+	};
 }

@@ -135,7 +135,7 @@ namespace subway {
 				}
 				s[63] = '\0';
 				int xx, yy;
-				if (fscanf_s(f,"%d%d",&xx,&yy)!=2) {
+				if (fscanf_s(f, "%d%d", &xx, &yy) != 2) {
 					throw new Exc("Bad File: expected numberic coordinates");
 				}
 				this->create_station(std::string(s), xx, yy);
@@ -303,7 +303,7 @@ namespace subway {
 			}
 			return PA(ss, tt);
 		}
-		
+
 		int **dis, **prev;
 		int *alt, altn;
 		int cnt = 0, cycle_ans = inf, cycle_res[maxE];
@@ -501,6 +501,7 @@ namespace subway {
 				pv = v;
 			}
 			print_plan(PA(cycle_ans, ansq.size() - cycle_ans - 1));
+			return 0;
 		}
 
 		int do_b(std::string s, std::string t) {
@@ -541,6 +542,20 @@ namespace subway {
 		std::string getStation(int id) {
 			if (id < 0 || id >= this->Stations.size()) return "";
 			else return this->Stations[id]->nm;
+		}
+
+		int getOriginalCNT() {
+			return this->ansq.size();
+		}
+
+		int getOriginalData(int id) {
+			if (id < 0 || id >= this->ansq.size()) return -1;
+			return this->Trans[this->ansq[this->ansq.size() - 1 - id]]->id;
+		}
+
+		int getIDByName(std::string* name) {
+			if (this->mp.find(*name) == this->mp.end()) return -1;
+			return this->mp[*name];
 		}
 
 		std::string getNameByXY(PA pos) {
