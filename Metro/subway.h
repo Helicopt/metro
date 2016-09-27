@@ -301,6 +301,10 @@ namespace subway {
 				mi = fa[mi];
 				this->ansq.push_back(mi);
 			}
+			free(dis[0]);
+			free(dis[1]);
+			free(fa);
+			free(iq);
 			return PA(ss, tt);
 		}
 
@@ -399,12 +403,12 @@ namespace subway {
 			}
 			dfs(0, 0);
 			int asd = 1;
-			/*free(dis[0]);
+			free(dis[0]);
 			free(dis);
 			free(prev[0]);
 			free(prev);
 			free(alt);
-			free(q);*/
+			free(q);
 		}
 
 	protected:
