@@ -261,10 +261,8 @@ namespace Metro {
 			this->imageList1->Images->SetKeyName(1, L"start.png");
 			this->imageList1->Images->SetKeyName(2, L"end.png");
 			this->imageList1->Images->SetKeyName(3, L"mark1.png");
-			this->imageList1->Images->SetKeyName(4, L"mark_2.png");
+			this->imageList1->Images->SetKeyName(4, L"mark2.png");
 			this->imageList1->Images->SetKeyName(5, L"mark3.png");
-			this->imageList1->Images->SetKeyName(6, L"mark_1.png");
-			this->imageList1->Images->SetKeyName(7, L"mark_3.png");
 			// 
 			// mainView
 			// 
