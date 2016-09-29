@@ -47,6 +47,12 @@ int main(int argc, char** argv) {
 					flag = 1;
 				}
 			}
+			else if (argc == 3 && !strcmp(argv[1], "-a")) {
+				std::string s(argv[2]);
+				if (!tt->do_a(s)) {
+					flag = 1;
+				}
+			}
 			else printf("Invalid Input.\n");
 			if (flag) {
 				printf("stations: %d, transfer: %d\n", tt->getPlanNums().first, tt->getPlanNums().second);

@@ -70,6 +70,7 @@ namespace Metro {
 	private: System::Windows::Forms::PictureBox^  pictureBox2;
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
 	private: System::Windows::Forms::ImageList^  imageList2;
+	private: System::Windows::Forms::Button^  button2;
 
 
 
@@ -113,6 +114,7 @@ namespace Metro {
 			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->imageList2 = (gcnew System::Windows::Forms::ImageList(this->components));
+			this->button2 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
@@ -122,10 +124,10 @@ namespace Metro {
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(46, 314);
+			this->button1->Location = System::Drawing::Point(166, 556);
 			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(103, 31);
-			this->button1->TabIndex = 0;
+			this->button1->Size = System::Drawing::Size(131, 31);
+			this->button1->TabIndex = 5;
 			this->button1->Text = L"查询";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &mainView::button1_Click);
@@ -133,17 +135,18 @@ namespace Metro {
 			// textBox1
 			// 
 			this->textBox1->ForeColor = System::Drawing::Color::RoyalBlue;
-			this->textBox1->Location = System::Drawing::Point(79, 223);
+			this->textBox1->Location = System::Drawing::Point(199, 477);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(98, 21);
 			this->textBox1->TabIndex = 1;
+			this->textBox1->TextChanged += gcnew System::EventHandler(this, &mainView::textBox1_TextChanged);
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
 			this->label1->BackColor = System::Drawing::Color::Transparent;
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label1->Location = System::Drawing::Point(44, 226);
+			this->label1->Location = System::Drawing::Point(164, 483);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(29, 12);
 			this->label1->TabIndex = 2;
@@ -154,19 +157,21 @@ namespace Metro {
 			this->label2->AutoSize = true;
 			this->label2->BackColor = System::Drawing::Color::Transparent;
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label2->Location = System::Drawing::Point(44, 273);
+			this->label2->Location = System::Drawing::Point(164, 529);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(29, 12);
 			this->label2->TabIndex = 4;
 			this->label2->Text = L"终点";
+			this->label2->Click += gcnew System::EventHandler(this, &mainView::label2_Click);
 			// 
 			// textBox2
 			// 
 			this->textBox2->ForeColor = System::Drawing::Color::RoyalBlue;
-			this->textBox2->Location = System::Drawing::Point(79, 270);
+			this->textBox2->Location = System::Drawing::Point(199, 523);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(98, 21);
 			this->textBox2->TabIndex = 3;
+			this->textBox2->TextChanged += gcnew System::EventHandler(this, &mainView::textBox2_TextChanged);
 			// 
 			// listBox1
 			// 
@@ -177,10 +182,10 @@ namespace Metro {
 			this->listBox1->ForeColor = System::Drawing::Color::RoyalBlue;
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 21;
-			this->listBox1->Location = System::Drawing::Point(183, 93);
+			this->listBox1->Location = System::Drawing::Point(392, 471);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(157, 462);
-			this->listBox1->TabIndex = 5;
+			this->listBox1->Size = System::Drawing::Size(296, 126);
+			this->listBox1->TabIndex = 9;
 			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &mainView::listBox1_SelectedIndexChanged);
 			this->listBox1->DoubleClick += gcnew System::EventHandler(this, &mainView::listBox1_DoubleClick);
 			// 
@@ -189,10 +194,10 @@ namespace Metro {
 			this->radioButton1->AutoSize = true;
 			this->radioButton1->BackColor = System::Drawing::Color::Transparent;
 			this->radioButton1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->radioButton1->Location = System::Drawing::Point(46, 189);
+			this->radioButton1->Location = System::Drawing::Point(52, 506);
 			this->radioButton1->Name = L"radioButton1";
 			this->radioButton1->Size = System::Drawing::Size(59, 16);
-			this->radioButton1->TabIndex = 6;
+			this->radioButton1->TabIndex = 7;
 			this->radioButton1->TabStop = true;
 			this->radioButton1->Text = L"少换乘";
 			this->radioButton1->UseVisualStyleBackColor = false;
@@ -203,10 +208,10 @@ namespace Metro {
 			this->radioButton2->AutoSize = true;
 			this->radioButton2->BackColor = System::Drawing::Color::Transparent;
 			this->radioButton2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->radioButton2->Location = System::Drawing::Point(111, 189);
+			this->radioButton2->Location = System::Drawing::Point(52, 529);
 			this->radioButton2->Name = L"radioButton2";
 			this->radioButton2->Size = System::Drawing::Size(59, 16);
-			this->radioButton2->TabIndex = 7;
+			this->radioButton2->TabIndex = 8;
 			this->radioButton2->TabStop = true;
 			this->radioButton2->Text = L"少停站";
 			this->radioButton2->UseVisualStyleBackColor = false;
@@ -215,12 +220,11 @@ namespace Metro {
 			// pictureBox1
 			// 
 			this->pictureBox1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(346, 92);
+			this->pictureBox1->Location = System::Drawing::Point(0, 0);
 			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(628, 461);
+			this->pictureBox1->Size = System::Drawing::Size(741, 458);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
 			this->pictureBox1->TabIndex = 8;
 			this->pictureBox1->TabStop = false;
@@ -259,13 +263,14 @@ namespace Metro {
 			this->trackBar1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(82)), static_cast<System::Int32>(static_cast<System::Byte>(139)),
 				static_cast<System::Int32>(static_cast<System::Byte>(234)));
 			this->trackBar1->LargeChange = 3;
-			this->trackBar1->Location = System::Drawing::Point(766, 556);
+			this->trackBar1->Location = System::Drawing::Point(746, 183);
 			this->trackBar1->Maximum = 7;
 			this->trackBar1->Minimum = 1;
 			this->trackBar1->Name = L"trackBar1";
+			this->trackBar1->Orientation = System::Windows::Forms::Orientation::Vertical;
 			this->trackBar1->RightToLeft = System::Windows::Forms::RightToLeft::Yes;
-			this->trackBar1->Size = System::Drawing::Size(207, 45);
-			this->trackBar1->TabIndex = 9;
+			this->trackBar1->Size = System::Drawing::Size(45, 207);
+			this->trackBar1->TabIndex = 10;
 			this->trackBar1->Value = 7;
 			this->trackBar1->Scroll += gcnew System::EventHandler(this, &mainView::trackBar1_Scroll);
 			// 
@@ -274,10 +279,10 @@ namespace Metro {
 			this->radioButton3->AutoSize = true;
 			this->radioButton3->BackColor = System::Drawing::Color::Transparent;
 			this->radioButton3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->radioButton3->Location = System::Drawing::Point(46, 153);
+			this->radioButton3->Location = System::Drawing::Point(52, 484);
 			this->radioButton3->Name = L"radioButton3";
 			this->radioButton3->Size = System::Drawing::Size(71, 16);
-			this->radioButton3->TabIndex = 10;
+			this->radioButton3->TabIndex = 6;
 			this->radioButton3->TabStop = true;
 			this->radioButton3->Text = L"周游一圈";
 			this->radioButton3->UseVisualStyleBackColor = false;
@@ -298,7 +303,7 @@ namespace Metro {
 			// 
 			this->pictureBox2->BackColor = System::Drawing::Color::Transparent;
 			this->pictureBox2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.Image")));
-			this->pictureBox2->Location = System::Drawing::Point(976, 12);
+			this->pictureBox2->Location = System::Drawing::Point(701, 7);
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->Size = System::Drawing::Size(32, 32);
 			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -311,7 +316,7 @@ namespace Metro {
 			// pictureBox3
 			// 
 			this->pictureBox3->BackColor = System::Drawing::Color::Transparent;
-			this->pictureBox3->Location = System::Drawing::Point(938, 12);
+			this->pictureBox3->Location = System::Drawing::Point(663, 7);
 			this->pictureBox3->Name = L"pictureBox3";
 			this->pictureBox3->Size = System::Drawing::Size(32, 32);
 			this->pictureBox3->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
@@ -330,28 +335,40 @@ namespace Metro {
 			this->imageList2->Images->SetKeyName(2, L"mini_up.png");
 			this->imageList2->Images->SetKeyName(3, L"mini_press.png");
 			// 
+			// button2
+			// 
+			this->button2->Location = System::Drawing::Point(229, 501);
+			this->button2->Margin = System::Windows::Forms::Padding(0);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(40, 20);
+			this->button2->TabIndex = 15;
+			this->button2->Text = L"↓↑";
+			this->button2->TextImageRelation = System::Windows::Forms::TextImageRelation::ImageAboveText;
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &mainView::button2_Click);
+			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::SteelBlue;
-			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
-			this->ClientSize = System::Drawing::Size(1020, 600);
+			this->ClientSize = System::Drawing::Size(741, 610);
 			this->ControlBox = false;
+			this->Controls->Add(this->button2);
+			this->Controls->Add(this->trackBar1);
+			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->radioButton3);
-			this->Controls->Add(this->trackBar1);
-			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->radioButton1);
-			this->Controls->Add(this->listBox1);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
+			this->Controls->Add(this->pictureBox1);
 			this->DoubleBuffered = true;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
 			this->MaximizeBox = false;
@@ -360,8 +377,11 @@ namespace Metro {
 			this->RightToLeftLayout = true;
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Metro";
-			this->TransparencyKey = System::Drawing::Color::SteelBlue;
+			this->TransparencyKey = System::Drawing::Color::Maroon;
 			this->Load += gcnew System::EventHandler(this, &mainView::mainView_Load);
+			this->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::mainView_MouseDown);
+			this->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::mainView_MouseMove);
+			this->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &mainView::mainView_MouseUp);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->contextMenuStrip1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
@@ -393,6 +413,8 @@ namespace Metro {
 		this->setCXY(589, 438, false);
 		this->pictureBox2->Image = this->imageList2->Images[0];
 		this->pictureBox3->Image = this->imageList2->Images[2];
+		this->pictureBox2->Parent = this->pictureBox1;
+		this->pictureBox3->Parent = this->pictureBox1;
 	}
 	private: int CX, CY, SCX, SCY;
 	private: float scale = 1.0;
@@ -480,6 +502,7 @@ namespace Metro {
 		std::string *t = this->stdString(st2);
 		this->listBox1->Items->Clear();
 		this->button1->Enabled = false;
+		this->button2->Enabled = false;
 		int flag;
 		if (this->textBox2->Enabled == false) flag = this->sd->do_a(*s);
 		else if (this->pm == subway::pm_convi) flag = this->sd->do_c(*s, *t);
@@ -499,7 +522,9 @@ namespace Metro {
 			this->BX = be.first, this->BY = be.second;
 			this->EX = en.first, this->EY = en.second;
 			this->nowAt = this->sd->getOriginalData(0);
+			this->scale = 0.7;
 			this->adjustSize();
+			this->setCXY((be.first+en.first>>1)*0.7,(be.second+en.second>>1)*0.7,false);
 		}
 		else {
 			this->listBox1->Items->Add("找不到站点");
@@ -508,6 +533,7 @@ namespace Metro {
 			this->hasEnd = false;
 		}
 		this->button1->Enabled = true;
+		this->button2->Enabled = true;
 
 		if (*s == "TDM_toka"&&this->radioButton3->Checked) {
 			this->editMode = 1;
@@ -530,7 +556,7 @@ namespace Metro {
 		this->textBox2->Enabled = true;
 	}
 	private: System::Void radioButton2_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-		this->pm = subway::pm_Short;
+			this->pm = subway::pm_Short;
 		this->textBox2->Enabled = true;
 	}
 	private: System::Void radioButton3_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -605,6 +631,7 @@ namespace Metro {
 
 	private: System::Void pictureBox1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		if (e->Button == System::Windows::Forms::MouseButtons::Left) this->Dragging = false;
+		if (e->Y < 45) return;
 		if (this->Dragging == false) {
 			int dx = abs(e->X - this->SX);
 			int dy = abs(e->Y - this->SY);
@@ -639,6 +666,10 @@ namespace Metro {
 		if (this->Dragging) {
 			int dx = e->X - this->dPreX;
 			int dy = e->Y - this->dPreY;
+			if (e->Y < 45) {
+				this->Location = Point(this->Location.X + dx, this->Location.Y + dy);
+				return;
+			}
 			this->setCXY(-dx, -dy, true);
 			this->dPreX = e->X;
 			this->dPreY = e->Y;
@@ -702,11 +733,46 @@ namespace Metro {
 	private: System::Void pictureBox3_Click(System::Object^  sender, System::EventArgs^  e) {
 		this->WindowState = System::Windows::Forms::FormWindowState::Minimized;
 	}
-private: System::Void pictureBox3_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
-	this->pictureBox3->Image = this->imageList2->Images[3];
-}
-private: System::Void pictureBox3_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
-	this->pictureBox3->Image = this->imageList2->Images[2];
-}
+	private: System::Void pictureBox3_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+		this->pictureBox3->Image = this->imageList2->Images[3];
+	}
+	private: System::Void pictureBox3_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+		this->pictureBox3->Image = this->imageList2->Images[2];
+	}
+	private: System::Void textBox2_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+	}
+	private: System::Void textBox1_TextChanged(System::Object^  sender, System::EventArgs^  e) {
+	}
+	private: System::Void label2_Click(System::Object^  sender, System::EventArgs^  e) {
+	}
+	private: int wdrag = 0,wpx,wpy;
+	private: System::Void mainView_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+			this->wdrag = 1;
+			this->wpx = e->X;
+			this->wpy = e->Y;
+		}
+	}
+
+	private: System::Void mainView_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		if (e->Button == System::Windows::Forms::MouseButtons::Left) {
+			this->wdrag = 0;
+		}
+	}
+	private: System::Void mainView_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		if (this->wdrag) {
+			int dx = e->X - this->wpx;
+			int dy = e->Y - this->wpy;
+			this->Location = Point(this->Location.X + dx, this->Location.Y + dy);
+			//this->wpx = e->X;
+			//this->wpy = e->Y;
+		}
+	}
+	
+	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+		System::String ^tmp = this->textBox1->Text;
+		this->textBox1->Text = this->textBox2->Text;
+		this->textBox2->Text = tmp;
+	}
 };
 }
