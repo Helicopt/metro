@@ -504,6 +504,7 @@ namespace subway {
 				pret = b;
 				pv = v;
 			}
+			std::reverse(ansq.begin(), ansq.end());
 			print_plan(PA(cycle_ans, ansq.size() - cycle_ans - 1));
 			return 0;
 		}

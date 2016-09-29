@@ -1,5 +1,5 @@
 #define DEBUG 1
-#undef DEBUG
+//#undef DEBUG
 #include<stdio.h>
 #include<windows.h>
 #include "mainView.h"
@@ -64,7 +64,8 @@ int main(int argc, char** argv) {
 #endif // !DEBUG
 
 #ifdef DEBUG
-		tt->do_c(std::string("知春路"), std::string("沙河"));
+		tt->do_a("东直门");
+		//tt->do_c(std::string("知春路"), std::string("沙河"));
 #endif //DEBUG
 		return 0;
 }
