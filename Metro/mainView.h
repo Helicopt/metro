@@ -67,6 +67,11 @@ namespace Metro {
 	private: System::Windows::Forms::TrackBar^  trackBar1;
 	private: System::Windows::Forms::RadioButton^  radioButton3;
 	private: System::Windows::Forms::ImageList^  imageList1;
+	private: System::Windows::Forms::PictureBox^  pictureBox2;
+	private: System::Windows::Forms::PictureBox^  pictureBox3;
+	private: System::Windows::Forms::ImageList^  imageList2;
+
+
 
 
 
@@ -105,14 +110,19 @@ namespace Metro {
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
 			this->imageList1 = (gcnew System::Windows::Forms::ImageList(this->components));
+			this->pictureBox2 = (gcnew System::Windows::Forms::PictureBox());
+			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
+			this->imageList2 = (gcnew System::Windows::Forms::ImageList(this->components));
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(12, 229);
+			this->button1->Location = System::Drawing::Point(46, 314);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(103, 31);
 			this->button1->TabIndex = 0;
@@ -122,7 +132,8 @@ namespace Metro {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(45, 138);
+			this->textBox1->ForeColor = System::Drawing::Color::RoyalBlue;
+			this->textBox1->Location = System::Drawing::Point(79, 223);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(98, 21);
 			this->textBox1->TabIndex = 1;
@@ -130,7 +141,9 @@ namespace Metro {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(10, 141);
+			this->label1->BackColor = System::Drawing::Color::Transparent;
+			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label1->Location = System::Drawing::Point(44, 226);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(29, 12);
 			this->label1->TabIndex = 2;
@@ -139,7 +152,9 @@ namespace Metro {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(10, 188);
+			this->label2->BackColor = System::Drawing::Color::Transparent;
+			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label2->Location = System::Drawing::Point(44, 273);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(29, 12);
 			this->label2->TabIndex = 4;
@@ -147,18 +162,24 @@ namespace Metro {
 			// 
 			// textBox2
 			// 
-			this->textBox2->Location = System::Drawing::Point(45, 185);
+			this->textBox2->ForeColor = System::Drawing::Color::RoyalBlue;
+			this->textBox2->Location = System::Drawing::Point(79, 270);
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(98, 21);
 			this->textBox2->TabIndex = 3;
 			// 
 			// listBox1
 			// 
+			this->listBox1->BackColor = System::Drawing::SystemColors::ControlLightLight;
+			this->listBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->listBox1->Font = (gcnew System::Drawing::Font(L"Microsoft YaHei Light", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->listBox1->ForeColor = System::Drawing::Color::RoyalBlue;
 			this->listBox1->FormattingEnabled = true;
-			this->listBox1->ItemHeight = 12;
-			this->listBox1->Location = System::Drawing::Point(149, 8);
+			this->listBox1->ItemHeight = 21;
+			this->listBox1->Location = System::Drawing::Point(183, 93);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(157, 460);
+			this->listBox1->Size = System::Drawing::Size(157, 462);
 			this->listBox1->TabIndex = 5;
 			this->listBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &mainView::listBox1_SelectedIndexChanged);
 			this->listBox1->DoubleClick += gcnew System::EventHandler(this, &mainView::listBox1_DoubleClick);
@@ -166,25 +187,29 @@ namespace Metro {
 			// radioButton1
 			// 
 			this->radioButton1->AutoSize = true;
-			this->radioButton1->Location = System::Drawing::Point(12, 104);
+			this->radioButton1->BackColor = System::Drawing::Color::Transparent;
+			this->radioButton1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->radioButton1->Location = System::Drawing::Point(46, 189);
 			this->radioButton1->Name = L"radioButton1";
 			this->radioButton1->Size = System::Drawing::Size(59, 16);
 			this->radioButton1->TabIndex = 6;
 			this->radioButton1->TabStop = true;
 			this->radioButton1->Text = L"少换乘";
-			this->radioButton1->UseVisualStyleBackColor = true;
+			this->radioButton1->UseVisualStyleBackColor = false;
 			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &mainView::radioButton1_CheckedChanged);
 			// 
 			// radioButton2
 			// 
 			this->radioButton2->AutoSize = true;
-			this->radioButton2->Location = System::Drawing::Point(77, 104);
+			this->radioButton2->BackColor = System::Drawing::Color::Transparent;
+			this->radioButton2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->radioButton2->Location = System::Drawing::Point(111, 189);
 			this->radioButton2->Name = L"radioButton2";
 			this->radioButton2->Size = System::Drawing::Size(59, 16);
 			this->radioButton2->TabIndex = 7;
 			this->radioButton2->TabStop = true;
 			this->radioButton2->Text = L"少停站";
-			this->radioButton2->UseVisualStyleBackColor = true;
+			this->radioButton2->UseVisualStyleBackColor = false;
 			this->radioButton2->CheckedChanged += gcnew System::EventHandler(this, &mainView::radioButton2_CheckedChanged);
 			// 
 			// pictureBox1
@@ -193,7 +218,7 @@ namespace Metro {
 			this->pictureBox1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(312, 7);
+			this->pictureBox1->Location = System::Drawing::Point(346, 92);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(628, 461);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::CenterImage;
@@ -231,9 +256,12 @@ namespace Metro {
 			// 
 			// trackBar1
 			// 
+			this->trackBar1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(82)), static_cast<System::Int32>(static_cast<System::Byte>(139)),
+				static_cast<System::Int32>(static_cast<System::Byte>(234)));
 			this->trackBar1->LargeChange = 3;
-			this->trackBar1->Location = System::Drawing::Point(742, 474);
+			this->trackBar1->Location = System::Drawing::Point(766, 556);
 			this->trackBar1->Maximum = 7;
+			this->trackBar1->Minimum = 1;
 			this->trackBar1->Name = L"trackBar1";
 			this->trackBar1->RightToLeft = System::Windows::Forms::RightToLeft::Yes;
 			this->trackBar1->Size = System::Drawing::Size(207, 45);
@@ -244,13 +272,15 @@ namespace Metro {
 			// radioButton3
 			// 
 			this->radioButton3->AutoSize = true;
-			this->radioButton3->Location = System::Drawing::Point(12, 68);
+			this->radioButton3->BackColor = System::Drawing::Color::Transparent;
+			this->radioButton3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->radioButton3->Location = System::Drawing::Point(46, 153);
 			this->radioButton3->Name = L"radioButton3";
 			this->radioButton3->Size = System::Drawing::Size(71, 16);
 			this->radioButton3->TabIndex = 10;
 			this->radioButton3->TabStop = true;
 			this->radioButton3->Text = L"周游一圈";
-			this->radioButton3->UseVisualStyleBackColor = true;
+			this->radioButton3->UseVisualStyleBackColor = false;
 			this->radioButton3->CheckedChanged += gcnew System::EventHandler(this, &mainView::radioButton3_CheckedChanged);
 			// 
 			// imageList1
@@ -264,11 +294,53 @@ namespace Metro {
 			this->imageList1->Images->SetKeyName(4, L"mark2.png");
 			this->imageList1->Images->SetKeyName(5, L"mark3.png");
 			// 
+			// pictureBox2
+			// 
+			this->pictureBox2->BackColor = System::Drawing::Color::Transparent;
+			this->pictureBox2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox2.Image")));
+			this->pictureBox2->Location = System::Drawing::Point(976, 12);
+			this->pictureBox2->Name = L"pictureBox2";
+			this->pictureBox2->Size = System::Drawing::Size(32, 32);
+			this->pictureBox2->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+			this->pictureBox2->TabIndex = 13;
+			this->pictureBox2->TabStop = false;
+			this->pictureBox2->Click += gcnew System::EventHandler(this, &mainView::pictureBox2_Click);
+			this->pictureBox2->MouseEnter += gcnew System::EventHandler(this, &mainView::pictureBox2_MouseEnter);
+			this->pictureBox2->MouseLeave += gcnew System::EventHandler(this, &mainView::pictureBox2_MouseLeave);
+			// 
+			// pictureBox3
+			// 
+			this->pictureBox3->BackColor = System::Drawing::Color::Transparent;
+			this->pictureBox3->Location = System::Drawing::Point(938, 12);
+			this->pictureBox3->Name = L"pictureBox3";
+			this->pictureBox3->Size = System::Drawing::Size(32, 32);
+			this->pictureBox3->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
+			this->pictureBox3->TabIndex = 14;
+			this->pictureBox3->TabStop = false;
+			this->pictureBox3->Click += gcnew System::EventHandler(this, &mainView::pictureBox3_Click);
+			this->pictureBox3->MouseEnter += gcnew System::EventHandler(this, &mainView::pictureBox3_MouseEnter);
+			this->pictureBox3->MouseLeave += gcnew System::EventHandler(this, &mainView::pictureBox3_MouseLeave);
+			// 
+			// imageList2
+			// 
+			this->imageList2->ImageStream = (cli::safe_cast<System::Windows::Forms::ImageListStreamer^>(resources->GetObject(L"imageList2.ImageStream")));
+			this->imageList2->TransparentColor = System::Drawing::Color::Transparent;
+			this->imageList2->Images->SetKeyName(0, L"close_up.png");
+			this->imageList2->Images->SetKeyName(1, L"close_press.png");
+			this->imageList2->Images->SetKeyName(2, L"mini_up.png");
+			this->imageList2->Images->SetKeyName(3, L"mini_press.png");
+			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(949, 510);
+			this->BackColor = System::Drawing::Color::SteelBlue;
+			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
+			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->ClientSize = System::Drawing::Size(1020, 600);
+			this->ControlBox = false;
+			this->Controls->Add(this->pictureBox3);
+			this->Controls->Add(this->pictureBox2);
 			this->Controls->Add(this->radioButton3);
 			this->Controls->Add(this->trackBar1);
 			this->Controls->Add(this->pictureBox1);
@@ -280,13 +352,21 @@ namespace Metro {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button1);
+			this->DoubleBuffered = true;
+			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::None;
+			this->MaximizeBox = false;
 			this->Name = L"mainView";
+			this->Opacity = 0.98;
 			this->RightToLeftLayout = true;
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"Metro";
+			this->TransparencyKey = System::Drawing::Color::SteelBlue;
 			this->Load += gcnew System::EventHandler(this, &mainView::mainView_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->contextMenuStrip1->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -311,6 +391,8 @@ namespace Metro {
 		this->setScale(1);
 		this->adjustSize();
 		this->setCXY(589, 438, false);
+		this->pictureBox2->Image = this->imageList2->Images[0];
+		this->pictureBox3->Image = this->imageList2->Images[2];
 	}
 	private: int CX, CY, SCX, SCY;
 	private: float scale = 1.0;
@@ -608,5 +690,23 @@ namespace Metro {
 			this->adjustSize();
 		}
 	}
-	};
+	private: System::Void pictureBox2_Click(System::Object^  sender, System::EventArgs^  e) {
+		exit(0);
+	}
+	private: System::Void pictureBox2_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+		this->pictureBox2->Image = this->imageList2->Images[1];
+	}
+	private: System::Void pictureBox2_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+		this->pictureBox2->Image = this->imageList2->Images[0];
+	}
+	private: System::Void pictureBox3_Click(System::Object^  sender, System::EventArgs^  e) {
+		this->WindowState = System::Windows::Forms::FormWindowState::Minimized;
+	}
+private: System::Void pictureBox3_MouseEnter(System::Object^  sender, System::EventArgs^  e) {
+	this->pictureBox3->Image = this->imageList2->Images[3];
+}
+private: System::Void pictureBox3_MouseLeave(System::Object^  sender, System::EventArgs^  e) {
+	this->pictureBox3->Image = this->imageList2->Images[2];
+}
+};
 }
