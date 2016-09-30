@@ -6,6 +6,7 @@
 #include<queue>
 #include<vector>
 #include<map>
+#include<ctime>
 #define maxE 4096
 #define inf (1<<30)
 #define transfer "»»³Ë"
@@ -328,7 +329,7 @@ namespace subway {
 				if (d + dis[v][0] < cycle_ans) {
 					cycle_ans = d + dis[v][0];
 					add(v, 0, d);
-					//cout << "find at " << clock()  / 1000. << "s, " << cnt << ": " << cycle_ans << endl;
+					//printf("find at %lfs, %d: %d\n", clock()  / 1000., cnt, cycle_ans);
 					return true;
 				}
 				return false;
@@ -443,7 +444,7 @@ namespace subway {
 				if (f != NULL) {
 					fclose(f);
 				}
-				exit(1);
+				throw E;
 			}
 			fclose(f);
 			/*if (this->initialize()) {
@@ -585,5 +586,9 @@ namespace subway {
 			else return PA(-1, -1);
 		}
 
+		vector<string> getLog()
+		{
+			return log;
+		}
 	};
 }

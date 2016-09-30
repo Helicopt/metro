@@ -1,5 +1,5 @@
 #define DEBUG 1
-//#undef DEBUG
+#undef DEBUG
 #include<stdio.h>
 #include<windows.h>
 #include "mainView.h"
@@ -19,7 +19,14 @@ int main(int argc, char** argv) {
 	int main() {
 #endif // DEBUG
 
-		subway::subway * tt = new subway::subway(std::string("./beijing-subway.txt"));
+		subway::subway * tt;
+		try {
+			tt = new subway::subway(std::string("./beijing-subway.txt"));
+		}
+		catch (subway::Exc* E) {
+			exit(1);
+		}
+
 #ifndef DEBUG
 		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
 			Application::EnableVisualStyles();
