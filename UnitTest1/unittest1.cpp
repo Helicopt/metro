@@ -3,7 +3,6 @@
 #include "../Metro/subway.h"
 #include <iostream>
 #include <ctime>
-#define FOR(i, l, r) for (int i = int(l), __border_right##i = int(r); i < __border_right##i; i++)
 #define MAXN 1013
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace std;
@@ -26,7 +25,7 @@ namespace UnitTest1
 			char tmp[100] = "»»³Ë";
 			int m = strlen(tmp);
 			int n = strlen(buf);
-			FOR(i, 0, n - m) {
+			for (int i = 0; i < n - m; i++) {
 				char c = buf[i + m];
 				buf[i + m] = 0;
 				if (strcmp(tmp, buf + i)) {
@@ -49,15 +48,15 @@ namespace UnitTest1
 		bool fd(const string&s, const string& t, int l)
 		{
 			if (l != -1) {
-				FOR(i, 0, st[l].size() - 1) {
+				for (int i = 0; i < st[l].size() - 1; i++) {
 					if ((s == st[l][i] && t == st[l][i + 1]) || (ty[l] != 2 && s == st[l][i + 1] && t == st[l][i])) {
 						return true;
 					}
 				}
 			}
 			else {
-				FOR(l, 0, ls) {
-					FOR(i, 0, st[l].size() - 1) {
+				for (int l = 0; l < ls; l++) {
+					for (int i = 0; i < st[l].size() - 1; i++) {
 						if ((s == st[l][i] && t == st[l][i + 1]) || (ty[l] != 2 && s == st[l][i + 1] && t == st[l][i])) {
 							return true;
 						}
@@ -105,6 +104,7 @@ namespace UnitTest1
 		}
 		bool chkroute(vector<string>& log, const string&s, const string& t, int &n, int &tr, bool cyc = false)
 		{
+			memset(mark, 0, sizeof(mark));
 			strcpy(buf, log[0].c_str());
 			prel = -1;
 			del(buf);
@@ -114,7 +114,7 @@ namespace UnitTest1
 			}
 			n = 0;
 			tr = 0;
-			FOR(i, 1, log.size()) {
+			for (int i = 1; i < log.size(); i++) {
 				strcpy(buf, log[i].c_str());
 				int tmp = prel;
 				if (del(buf)) {
@@ -127,15 +127,19 @@ namespace UnitTest1
 					//cout << pre << " !!!! " << nex << endl;
 					return false;
 				}
+				mark[st2i[pre]] = true;
 				pre = nex;
 			}
 			if (pre != (cyc ? s : t)) {
 				return false;
 			}
-			FOR(i, 1, st2i.size() + 1) {
-				if (!mark[i]) {
-					//cout << "!!!!!!!" << i << " " << name[i] << endl;
-					return false;
+			mark[st2i[pre]] = true;
+			if (cyc) {
+				for (int i = 0; i < st2i.size(); i++) {
+					if (!mark[i]) {
+						//cout << "!!!!!!!" << i << " " << name[i] << endl;
+						return false;
+					}
 				}
 			}
 			return true;
@@ -149,7 +153,7 @@ namespace UnitTest1
 
 		TEST_METHOD(TestInitial)
 		{
-			system("dir > yictmp");
+			//system("dir > yictmp");
 			subway::subway* a = new subway::subway(string("../../Metro/beijing-subway.txt"));
 			//Assert::AreEqual(a->initialize(), false);
 			free(a);
@@ -242,8 +246,6 @@ namespace UnitTest1
 		{
 			subway::subway* sub = new subway::subway(path1);
 			MyTest *mt = new MyTest(path2);
-			bool mark[MAXN];
-			memset(mark, 0, sizeof(mark));
 			char buf[MAXN];
 			srand(time(0));
 			for (int i = 0; i < 10; i++) {
