@@ -25,9 +25,11 @@ namespace Metro {
 	public ref class mainView : public System::Windows::Forms::Form
 	{
 	public:
-		mainView(subway::subway *subw)
+		mainView(subway::subway **subw, int Count)
 		{
-			this->sd = subw;
+			//this->sd = subw[0];
+			this->sds = subw;
+			this->sdsC = Count;
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -53,6 +55,8 @@ namespace Metro {
 	private: System::Windows::Forms::ListBox^  listBox1;
 
 	private: subway::subway * sd;
+	private: subway::subway ** sds;
+	private: int sdsC;
 	private: subway::planMode pm;
 	private: System::Drawing::Bitmap ^ bm, ^src;
 	private: Graphics^ gh;
@@ -404,13 +408,19 @@ namespace Metro {
 		this->textBox2->Text = "É³ºÓ";
 		this->pm = subway::pm_Short;
 		this->radioButton2->Checked = true;
-		System::Drawing::Pen^ pen = gcnew System::Drawing::Pen(System::Drawing::Color::DarkSeaGreen);
-		this->src = (Bitmap^)this->pictureBox1->Image;
-		this->pbW = this->pictureBox1->Width;
-		this->pbH = this->pictureBox1->Height;
-		this->setScale(1);
-		this->adjustSize();
-		this->setCXY(589, 438, false);
+		this->contextMenuStrip1->Items->Add("-");
+		System::Windows::Forms::ToolStripMenuItem ^fsti;
+		for (int i = 0; i < this->sdsC; ++i) {
+			System::Windows::Forms::ToolStripMenuItem ^tsmi = gcnew System::Windows::Forms::ToolStripMenuItem();
+			tsmi->Name = this->SysString(this->sds[i]->getLineName().c_str()) + "itm";
+			tsmi->Size = System::Drawing::Size(136, 22);
+			tsmi->Text = this->SysString(this->sds[i]->getLineName().c_str());
+			tsmi->Click += gcnew System::EventHandler(this, &mainView::changeMap);
+			this->contextMenuStrip1->Items->Add(tsmi);
+			if (i == 0) fsti = tsmi;
+		}
+		fsti->PerformClick();
+
 		this->pictureBox2->Image = this->imageList2->Images[0];
 		this->pictureBox3->Image = this->imageList2->Images[2];
 		this->pictureBox2->Parent = this->pictureBox1;
@@ -711,6 +721,7 @@ namespace Metro {
 		this->textBox2->Text = this->SysString(pname.c_str());
 		this->adjustSize();
 	}
+
 	private: System::Void listBox1_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
 		int id = this->listBox1->SelectedIndex;
 		if (id > 0 && this->listBox1->Items->Count) {
@@ -773,6 +784,39 @@ namespace Metro {
 		System::String ^tmp = this->textBox1->Text;
 		this->textBox1->Text = this->textBox2->Text;
 		this->textBox2->Text = tmp;
+	}
+
+	private: System::Void changeMap(System::Object^  sender, System::EventArgs^  e) {
+		System::Windows::Forms::ToolStripMenuItem^ tmp = ((System::Windows::Forms::ToolStripMenuItem^)sender);
+		//fprintf_s(stderr, "%s in %d lines\n", "finding", min(this->sdsC, this->contextMenuStrip1->Items->Count));
+		this->hasBegin = false;
+		this->hasEnd = false;
+		this->hasSigned = false;
+		this->hasRoute = false;
+		for (int i = 0; i < this->sdsC; ++i) {
+			if (this->contextMenuStrip1->Items[i + 3] == tmp) {
+				tmp->Checked = true;
+				this->sd = this->sds[i];
+				//fprintf_s(stderr, "%s\n", "find one");
+			}
+			else ((System::Windows::Forms::ToolStripMenuItem^)(this->contextMenuStrip1->Items[i + 3]))->Checked = false;
+		}
+		try {
+			this->pictureBox1->Image = System::Drawing::Image::FromFile(this->SysString(this->sd->getMapPic().c_str()));
+		}
+		catch (const System::Exception ^e)
+		{
+			fprintf_s(stderr, "%s\n", "read map failed.");
+			throw e;
+		}
+		System::Drawing::Pen^ pen = gcnew System::Drawing::Pen(System::Drawing::Color::DarkSeaGreen);
+		this->src = (Bitmap^)this->pictureBox1->Image;
+		this->pbW = this->pictureBox1->Width;
+		this->pbH = this->pictureBox1->Height;
+		this->setScale(1);
+		this->adjustSize();
+		this->setCXY(this->src->Width>>1, this->src->Height>>1, false);
+		this->Text = "Metro - " + this->SysString(this->sd->getLineName().c_str());
 	}
 };
 }

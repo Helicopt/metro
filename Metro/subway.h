@@ -1,4 +1,5 @@
 #pragma once
+#define _AFXDLL
 #include<cstdio>
 #include<cstdlib>
 #include<cstring>
@@ -49,7 +50,7 @@ namespace subway {
 	class subway {
 
 	private:
-		std::string dataPath;
+		std::string dataPath, mapPic, LName;
 		std::map<std::string, int> mp;	//name to id
 		std::vector<St*> Stations;
 		std::vector<Tr*> Trans;
@@ -422,8 +423,10 @@ namespace subway {
 		}
 
 	public:
-		subway(std::string DataPath) {
+		subway(std::string lnm, std::string DataPath, std::string mapP) {
+			this->LName = lnm;
 			this->dataPath = DataPath;
+			this->mapPic = mapP;
 			this->mp.clear();
 			this->Stations.clear();
 			this->Trans.clear();
@@ -589,6 +592,14 @@ namespace subway {
 		vector<string> getLog()
 		{
 			return log;
+		}
+
+		std::string getMapPic() {
+			return this->mapPic;
+		}
+
+		std::string getLineName() {
+			return this->LName;
 		}
 	};
 }

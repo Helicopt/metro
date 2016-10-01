@@ -2,6 +2,8 @@
 #undef DEBUG
 #include<stdio.h>
 #include<windows.h>
+//#include <afx.h>
+#include <direct.h>
 #include "mainView.h"
 
 #ifdef DEBUG
@@ -19,18 +21,63 @@ int main(int argc, char** argv) {
 	int main() {
 #endif // DEBUG
 
+		subway::subway *mps[16];
+		int cnt = 0;
+		/*
+		CFileFind dir;
+		std::string strFilePath("./data/");
+		char * m_szOldDir = (char*)malloc(512);
+		getcwd(m_szOldDir, MAX_PATH); // 保存遍历前的起始目录 
+		if (chdir(strFilePath.c_str()) == -1) {// 进入指定目录 
+			printf("Data not found.");
+			exit(1);
+		}
+		bool ret = dir.FindFile(L"*.*");
+		while (ret) {
+			ret = dir.FindNextFileW();
+			if (dir.IsDirectory() && !dir.IsDots()) {
+				CString dp=dir.GetFilePath();
+				CString dn = dir.GetFileName();
+				if (GetFileAttributes(dp + dn + "/" + dn + "-subway.txt") != 0xFFFFFFFF && 
+					GetFileAttributes(dp + dn + "/" + dn + "-subway.png") != 0xFFFFFFFF) {
+					subway::subway * tt;
+					try {
+						std::string linm((LPCSTR)dn.GetBuffer());
+						dn.ReleaseBuffer();
+						tt = new subway::subway(linm, std::string("./data/") + linm + "/" + linm + "-subway.txt", std::string("./data/") + linm + "/" + linm + "-subway.png");
+					}
+					catch (subway::Exc* E) {
+						exit(1);
+					}
+					mps[cnt++] = tt;
+				}
+			}
+		}
+
+		chdir(m_szOldDir);*/
+
 		subway::subway * tt;
+
+		std::string linm("beijing");
 		try {
-			tt = new subway::subway(std::string("./beijing-subway.txt"));
+			tt = new subway::subway(linm, std::string("./data/") + linm + "/" + linm + "-subway.txt", std::string("./data/") + linm + "/" + linm + "-subway.png");
 		}
 		catch (subway::Exc* E) {
 			exit(1);
 		}
+		cnt = 1;
+		mps[0] = tt;
+
+		if (cnt == 0) {
+			printf("Data not found.");
+			exit(1);
+		}
+		else tt = mps[0];
 
 #ifndef DEBUG
 		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
 			Application::EnableVisualStyles();
-			Application::Run(gcnew mainView(tt));
+			Application::Run(gcnew mainView(mps,cnt));
 			HWND hwnd;
 			hwnd = FindWindow(L"ConsoleWindowClass", NULL);
 			if (hwnd) {
