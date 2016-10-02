@@ -73,6 +73,15 @@ namespace Metro {
 	private: System::Windows::Forms::PictureBox^  pictureBox3;
 	private: System::Windows::Forms::ImageList^  imageList2;
 	private: System::Windows::Forms::Button^  button2;
+	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStrip2;
+	private: System::Windows::Forms::ToolStripMenuItem^  蓝色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  红色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  黑色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  绿色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  紫色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  白色ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  金色ToolStripMenuItem;
+
 
 
 
@@ -117,11 +126,20 @@ namespace Metro {
 			this->pictureBox3 = (gcnew System::Windows::Forms::PictureBox());
 			this->imageList2 = (gcnew System::Windows::Forms::ImageList(this->components));
 			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->contextMenuStrip2 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->蓝色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->红色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->黑色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->绿色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->紫色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->白色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->金色ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->contextMenuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->BeginInit();
+			this->contextMenuStrip2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -349,6 +367,65 @@ namespace Metro {
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &mainView::button2_Click);
 			// 
+			// contextMenuStrip2
+			// 
+			this->contextMenuStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
+				this->蓝色ToolStripMenuItem,
+					this->红色ToolStripMenuItem, this->黑色ToolStripMenuItem, this->绿色ToolStripMenuItem, this->紫色ToolStripMenuItem, this->白色ToolStripMenuItem,
+					this->金色ToolStripMenuItem
+			});
+			this->contextMenuStrip2->Name = L"contextMenuStrip2";
+			this->contextMenuStrip2->Size = System::Drawing::Size(125, 158);
+			// 
+			// 蓝色ToolStripMenuItem
+			// 
+			this->蓝色ToolStripMenuItem->Name = L"蓝色ToolStripMenuItem";
+			this->蓝色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->蓝色ToolStripMenuItem->Text = L"苍蓝钢铁";
+			this->蓝色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::蓝色ToolStripMenuItem_Click);
+			// 
+			// 红色ToolStripMenuItem
+			// 
+			this->红色ToolStripMenuItem->Name = L"红色ToolStripMenuItem";
+			this->红色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->红色ToolStripMenuItem->Text = L"绯绯色金";
+			this->红色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::红色ToolStripMenuItem_Click);
+			// 
+			// 黑色ToolStripMenuItem
+			// 
+			this->黑色ToolStripMenuItem->Name = L"黑色ToolStripMenuItem";
+			this->黑色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->黑色ToolStripMenuItem->Text = L"黑之睡莲";
+			this->黑色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::黑色ToolStripMenuItem_Click);
+			// 
+			// 绿色ToolStripMenuItem
+			// 
+			this->绿色ToolStripMenuItem->Name = L"绿色ToolStripMenuItem";
+			this->绿色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->绿色ToolStripMenuItem->Text = L"胶化香蕉";
+			this->绿色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::绿色ToolStripMenuItem_Click);
+			// 
+			// 紫色ToolStripMenuItem
+			// 
+			this->紫色ToolStripMenuItem->Name = L"紫色ToolStripMenuItem";
+			this->紫色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->紫色ToolStripMenuItem->Text = L"荡漾女王";
+			this->紫色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::紫色ToolStripMenuItem_Click);
+			// 
+			// 白色ToolStripMenuItem
+			// 
+			this->白色ToolStripMenuItem->Name = L"白色ToolStripMenuItem";
+			this->白色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->白色ToolStripMenuItem->Text = L"一千减七";
+			this->白色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::白色ToolStripMenuItem_Click);
+			// 
+			// 金色ToolStripMenuItem
+			// 
+			this->金色ToolStripMenuItem->Name = L"金色ToolStripMenuItem";
+			this->金色ToolStripMenuItem->Size = System::Drawing::Size(124, 22);
+			this->金色ToolStripMenuItem->Text = L"誓约胜利";
+			this->金色ToolStripMenuItem->Click += gcnew System::EventHandler(this, &mainView::金色ToolStripMenuItem_Click);
+			// 
 			// mainView
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
@@ -356,6 +433,7 @@ namespace Metro {
 			this->BackColor = System::Drawing::Color::SteelBlue;
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(741, 610);
+			this->ContextMenuStrip = this->contextMenuStrip2;
 			this->ControlBox = false;
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->trackBar1);
@@ -389,6 +467,7 @@ namespace Metro {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox2))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox3))->EndInit();
+			this->contextMenuStrip2->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -401,6 +480,7 @@ namespace Metro {
 		return System::Runtime::InteropServices::Marshal::PtrToStringAnsi((IntPtr)(char*)ch);
 	}
 	private: System::Void mainView_Load(System::Object^  sender, System::EventArgs^  e) {
+		std::srand(time(0));
 		//this->sd = new subway::subway(std::string("./beijing-subway.txt"));
 		this->pm = subway::pm_Short;
 		this->radioButton2->Checked = true;
@@ -421,6 +501,8 @@ namespace Metro {
 		this->pictureBox3->Image = this->imageList2->Images[2];
 		this->pictureBox2->Parent = this->pictureBox1;
 		this->pictureBox3->Parent = this->pictureBox1;
+		int themeID = std::rand() % 7;
+		((ToolStripMenuItem^)(this->contextMenuStrip2->Items[themeID]))->PerformClick();
 	}
 	private: int CX, CY, SCX, SCY;
 	private: float scale = 1.0;
@@ -822,5 +904,138 @@ namespace Metro {
 		this->textBox2->Text = this->SysString(this->sd->getStation(std::rand() % this->sd->stationCount()).c_str());
 		this->Text = "Metro - " + this->SysString(this->sd->getLineName().c_str());
 	}
+private: System::Void 红色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::LightPink;
+	Color lab = Color::FromArgb(236,30,66);
+	Color tex = Color::FromArgb(239, 75, 104);
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
+private: System::Void 蓝色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::SteelBlue;
+	Color lab = Color::White;
+	Color tex = Color::SteelBlue;
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
+private: System::Void 黑色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::FromArgb(64,64,64);
+	Color lab = Color::White;
+	Color tex = Color::White;
+	Color bgm = Color::FromArgb(32, 32, 32);
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::FixedSingle;
+	this->textBox2->BorderStyle = BorderStyle::FixedSingle;
+}
+private: System::Void 绿色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::FromArgb(82,235,86);
+	Color lab = Color::FromArgb(24,100,60);
+	Color tex = Color::FromArgb(22,214,95);
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
+private: System::Void 紫色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::FromArgb(106, 57, 104);
+	Color lab = Color::White;
+	Color tex = Color::FromArgb(106, 57, 104);
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
+private: System::Void 白色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::GhostWhite;
+	Color lab = Color::FromArgb(32, 32, 32);
+	Color tex = Color::FromArgb(32, 32, 32);
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
+private: System::Void 金色ToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	this->BackColor = Color::FromArgb(247,237,159);
+	Color lab = Color::FromArgb(26, 34, 79);
+	Color tex = Color::FromArgb(243, 143, 33);
+	Color bgm = Color::White;
+	this->label1->ForeColor = lab;
+	this->label2->ForeColor = lab;
+	this->radioButton1->ForeColor = lab;
+	this->radioButton2->ForeColor = lab;
+	this->radioButton3->ForeColor = lab;
+	this->textBox1->ForeColor = tex;
+	this->textBox2->ForeColor = tex;
+	this->listBox1->ForeColor = tex;
+	this->textBox1->BackColor = bgm;
+	this->textBox2->BackColor = bgm;
+	this->listBox1->BackColor = bgm;
+	this->textBox1->BorderStyle = BorderStyle::Fixed3D;
+	this->textBox2->BorderStyle = BorderStyle::Fixed3D;
+}
 };
 }
