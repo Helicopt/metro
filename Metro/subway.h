@@ -1,5 +1,4 @@
 #pragma once
-#define _AFXDLL
 #include<cstdio>
 #include<cstdlib>
 #include<cstring>
@@ -602,4 +601,70 @@ namespace subway {
 			return this->LName;
 		}
 	};
+
+	class swList {
+	private:
+		int vs;
+		std::vector<subway*> g;
+		std::vector< std::pair<std::string, std::string> > nms;
+		std::string src;
+
+		void initialize(FILE *f) {
+			int n;
+			if (fscanf_s(f, "%d%d", &vs, &n) != 2) throw new Exc("Bad data.");
+			char s[256], t[256];
+			for (int i = 0; i < n; ++i) {
+				if (fscanf_s(f, "%s", s, 64)!=1) throw new Exc("Bad data.");
+				if (fscanf_s(f, "%s", t, 64)!=1) throw new Exc("Bad data.");
+				subway* tt;
+				std::string linm(s);
+				try {
+					tt = new subway(linm, this->src + "\\" + linm + "\\" + linm + "-subway.txt", this->src + "\\" + linm + "\\" + linm + "-subway.png");
+				}
+				catch (Exc* E) {
+					continue;
+				}
+				this->g.push_back(tt);
+				this->nms.push_back(std::make_pair(linm,std::string(t)));
+			}
+		}
+
+	public: 
+		swList(std::string path) {
+			this->src = path;
+			FILE* f;
+			fopen_s(&f, (this->src + "\\" + "map.list").c_str(), "r");
+			this->g.clear();
+			if (f == NULL) throw new Exc("Bad data.");
+			try {
+				this->initialize(f);
+			}
+			catch (Exc* e) {
+				throw e;
+			}
+			fclose(f);
+
+		}
+
+		subway* operator [] (int x) {
+			if (x >= 0 && x < this->g.size()) return this->g[x];
+			else return 0;
+		}
+
+		int size() {
+			return this->g.size();
+		}
+
+		std::string code(int index) {
+			if (index >= 0 && index < this->g.size()) return this->nms[index].first;
+			else return "";
+		}
+
+		std::string CityName(int index) {
+			if (index >= 0 && index < this->g.size()) return this->nms[index].second;
+			else return "";
+		}
+
+	};
+
 }

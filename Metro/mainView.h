@@ -25,11 +25,10 @@ namespace Metro {
 	public ref class mainView : public System::Windows::Forms::Form
 	{
 	public:
-		mainView(subway::subway **subw, int Count)
+		mainView(subway::swList *mps)
 		{
 			//this->sd = subw[0];
-			this->sds = subw;
-			this->sdsC = Count;
+			this->sds = mps;
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
@@ -55,8 +54,7 @@ namespace Metro {
 	private: System::Windows::Forms::ListBox^  listBox1;
 
 	private: subway::subway * sd;
-	private: subway::subway ** sds;
-	private: int sdsC;
+	private: subway::swList * sds;
 	private: subway::planMode pm;
 	private: System::Drawing::Bitmap ^ bm, ^src;
 	private: Graphics^ gh;
@@ -404,17 +402,15 @@ namespace Metro {
 	}
 	private: System::Void mainView_Load(System::Object^  sender, System::EventArgs^  e) {
 		//this->sd = new subway::subway(std::string("./beijing-subway.txt"));
-		this->textBox1->Text = "知春路";
-		this->textBox2->Text = "沙河";
 		this->pm = subway::pm_Short;
 		this->radioButton2->Checked = true;
 		this->contextMenuStrip1->Items->Add("-");
 		System::Windows::Forms::ToolStripMenuItem ^fsti;
-		for (int i = 0; i < this->sdsC; ++i) {
+		for (int i = 0; i < this->sds->size(); ++i) {
 			System::Windows::Forms::ToolStripMenuItem ^tsmi = gcnew System::Windows::Forms::ToolStripMenuItem();
-			tsmi->Name = this->SysString(this->sds[i]->getLineName().c_str()) + "itm";
+			tsmi->Name = this->SysString(this->sds->CityName(i).c_str()) + "itm";
 			tsmi->Size = System::Drawing::Size(136, 22);
-			tsmi->Text = this->SysString(this->sds[i]->getLineName().c_str());
+			tsmi->Text = this->SysString(this->sds->CityName(i).c_str());
 			tsmi->Click += gcnew System::EventHandler(this, &mainView::changeMap);
 			this->contextMenuStrip1->Items->Add(tsmi);
 			if (i == 0) fsti = tsmi;
@@ -534,7 +530,7 @@ namespace Metro {
 			this->nowAt = this->sd->getOriginalData(0);
 			this->scale = 0.7;
 			this->adjustSize();
-			this->setCXY((be.first+en.first>>1)*0.7,(be.second+en.second>>1)*0.7,false);
+			this->setCXY((be.first+en.first>>1)*0.6,(be.second+en.second>>1)*0.6,false);
 		}
 		else {
 			this->listBox1->Items->Add("找不到站点");
@@ -688,8 +684,9 @@ namespace Metro {
 			this->pictureBox1->ResetCursor();
 		}
 	}
+	private: double scaleFactor = 0.1;
 	private: System::Void trackBar1_Scroll(System::Object^  sender, System::EventArgs^  e) {
-		this->setScale(0.3 + 0.1*(this->trackBar1->Value));
+		this->setScale(1.0 - this->scaleFactor*(7-this->trackBar1->Value));
 	}
 	private: System::Void listBox1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 	}
@@ -793,10 +790,10 @@ namespace Metro {
 		this->hasEnd = false;
 		this->hasSigned = false;
 		this->hasRoute = false;
-		for (int i = 0; i < this->sdsC; ++i) {
+		for (int i = 0; i < this->sds->size(); ++i) {
 			if (this->contextMenuStrip1->Items[i + 3] == tmp) {
 				tmp->Checked = true;
-				this->sd = this->sds[i];
+				this->sd = (*(this->sds))[i];
 				//fprintf_s(stderr, "%s\n", "find one");
 			}
 			else ((System::Windows::Forms::ToolStripMenuItem^)(this->contextMenuStrip1->Items[i + 3]))->Checked = false;
@@ -813,9 +810,16 @@ namespace Metro {
 		this->src = (Bitmap^)this->pictureBox1->Image;
 		this->pbW = this->pictureBox1->Width;
 		this->pbH = this->pictureBox1->Height;
-		this->setScale(1);
+		this->trackBar1->Minimum = 0;
+		this->trackBar1->Maximum = 7;
+		this->trackBar1->Value = 6;
+		this->scaleFactor = (1.0 - max((double)this->pbW / this->src->Width, (double)this->pbH / this->src->Height)) / 7;
+		//printf("%.6f\n",this->scaleFactor);
+		this->setScale(1.0 - this->scaleFactor*(7-this->trackBar1->Value));
 		this->adjustSize();
 		this->setCXY(this->src->Width>>1, this->src->Height>>1, false);
+		this->textBox1->Text = this->SysString(this->sd->getStation(std::rand() % this->sd->stationCount()).c_str());
+		this->textBox2->Text = this->SysString(this->sd->getStation(std::rand() % this->sd->stationCount()).c_str());
 		this->Text = "Metro - " + this->SysString(this->sd->getLineName().c_str());
 	}
 };

@@ -1,5 +1,6 @@
 #define DEBUG 1
 #undef DEBUG
+//#define _AFXDLL
 #include<stdio.h>
 #include<windows.h>
 //#include <afx.h>
@@ -21,15 +22,16 @@ int main(int argc, char** argv) {
 	int main() {
 #endif // DEBUG
 
-		subway::subway *mps[16];
-		int cnt = 0;
-		/*
-		CFileFind dir;
-		std::string strFilePath("./data/");
+		subway::swList *mps = new subway::swList(".\\data");
+		
+		/*CFileFind dir;
+		std::string strFilePath("E:\\workspace\\VS\Metro\\Metro\\data\\");
 		char * m_szOldDir = (char*)malloc(512);
-		getcwd(m_szOldDir, MAX_PATH); // 保存遍历前的起始目录 
+		getcwd(m_szOldDir, MAX_PATH); // 保存遍历前的起始目录
+		puts(m_szOldDir);
 		if (chdir(strFilePath.c_str()) == -1) {// 进入指定目录 
 			printf("Data not found.");
+			system("pause");
 			exit(1);
 		}
 		bool ret = dir.FindFile(L"*.*");
@@ -58,26 +60,18 @@ int main(int argc, char** argv) {
 
 		subway::subway * tt;
 
-		std::string linm("beijing");
-		try {
-			tt = new subway::subway(linm, std::string("./data/") + linm + "/" + linm + "-subway.txt", std::string("./data/") + linm + "/" + linm + "-subway.png");
-		}
-		catch (subway::Exc* E) {
-			exit(1);
-		}
-		cnt = 1;
-		mps[0] = tt;
+		//Load Map List
 
-		if (cnt == 0) {
+		if (mps->size() == 0) {
 			printf("Data not found.");
 			exit(1);
 		}
-		else tt = mps[0];
+		else tt = (*mps)[0];
 
 #ifndef DEBUG
 		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
 			Application::EnableVisualStyles();
-			Application::Run(gcnew mainView(mps,cnt));
+			Application::Run(gcnew mainView(mps));
 			HWND hwnd;
 			hwnd = FindWindow(L"ConsoleWindowClass", NULL);
 			if (hwnd) {
