@@ -666,7 +666,7 @@ namespace Metro {
 			this->pictureBox1->Cursor = Cursors::SizeAll;
 		}
 		else if (e->Button == System::Windows::Forms::MouseButtons::Right) {
-			this->contextMenuStrip1->Show(MousePosition);
+			//this->contextMenuStrip1->Show(MousePosition);
 		}
 	}
 
