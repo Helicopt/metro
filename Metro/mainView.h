@@ -530,7 +530,7 @@ namespace Metro {
 			this->nowAt = this->sd->getOriginalData(0);
 			this->scale = 0.7;
 			this->adjustSize();
-			this->setCXY((be.first+en.first>>1)*0.6,(be.second+en.second>>1)*0.6,false);
+			this->setCXY((be.first+en.first>>1)*0.5,(be.second+en.second>>1)*0.5,false);
 		}
 		else {
 			this->listBox1->Items->Add("ур╡╩╣╫у╬╣Ц");
