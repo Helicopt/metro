@@ -240,6 +240,7 @@ namespace Metro {
 			// pictureBox1
 			// 
 			this->pictureBox1->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
+			this->pictureBox1->ContextMenuStrip = this->contextMenuStrip1;
 			this->pictureBox1->Cursor = System::Windows::Forms::Cursors::SizeAll;
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
 			this->pictureBox1->Location = System::Drawing::Point(0, 0);
