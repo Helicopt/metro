@@ -1,5 +1,5 @@
 #define DEBUG 1
-#undef DEBUG
+//#undef DEBUG
 //#define _AFXDLL
 #include<stdio.h>
 #include<windows.h>
@@ -21,8 +21,20 @@ int main(int argc, char** argv) {
 #ifdef DEBUG
 	int main() {
 #endif // DEBUG
-
-		subway::swList *mps = new subway::swList(".\\data");
+		subway::swList *mps;
+		try {
+			 mps = new subway::swList("./data");
+			 if (mps->size() == 0) {
+				 throw new subway::Exc("Data not found.");
+			 }
+		}
+		catch (subway::Exc *e) {
+			fprintf_s(stderr, "%s\n", e->info.c_str());
+			//printf("Press any key to continue.");
+			system("PAUSE");
+			//getch();
+			exit(1);
+		}
 		
 		/*CFileFind dir;
 		std::string strFilePath("E:\\workspace\\VS\Metro\\Metro\\data\\");
@@ -58,15 +70,10 @@ int main(int argc, char** argv) {
 
 		chdir(m_szOldDir);*/
 
-		subway::subway * tt;
-
 		//Load Map List
+		subway::subway * tt;
+		tt = (*mps)[0];
 
-		if (mps->size() == 0) {
-			printf("Data not found.");
-			exit(1);
-		}
-		else tt = (*mps)[0];
 
 #ifndef DEBUG
 		if (argc == 1 || argc == 2 && !strcmp(argv[1], "-g")) {
@@ -112,7 +119,8 @@ int main(int argc, char** argv) {
 #endif // !DEBUG
 
 #ifdef DEBUG
-		tt->do_a("东直门");
+		delete tt;
+		//tt->do_a("东直门");
 		//tt->do_c(std::string("知春路"), std::string("沙河"));
 #endif //DEBUG
 		return 0;

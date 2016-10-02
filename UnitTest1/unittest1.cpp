@@ -9,7 +9,8 @@ using namespace std;
 
 namespace UnitTest1
 {
-	TEST_CLASS(MyTest)
+	string rootDir("../../");
+	TEST_CLASS(SubwayTest)
 	{
 	private:
 		string line[MAXN];
@@ -69,7 +70,7 @@ namespace UnitTest1
 		vector<string> st[MAXN];
 		int ln[MAXN];
 		int ls = 0;
-		MyTest(string path)
+		SubwayTest(string path)
 		{
 			FILE* fin;
 			fopen_s(&fin, path.c_str(), "r");
@@ -150,20 +151,20 @@ namespace UnitTest1
 	TEST_CLASS(UnitTest1)
 	{
 	public:
-
-		TEST_METHOD(TestInitial)
+		string baseDir = rootDir + "UnitTest1/TestFile/";
+		TEST_METHOD(testInitial)
 		{
 			//system("dir > yictmp");
-			subway::subway* a = new subway::subway(string("../../Metro/beijing-subway.txt"));
+			subway::subway* a = new subway::subway("", baseDir + "beijing/beijing-subway.txt");
 			//Assert::AreEqual(a->initialize(), false);
-			free(a);
+			delete a;
 		}
 
-		TEST_METHOD(TestEmpty)
+		TEST_METHOD(testEmpty)
 		{
 			try {
-				subway::subway* a = new subway::subway(string("test"));
-				free(a);
+				subway::subway* a = new subway::subway("", string("test"));
+				delete a;
 			}
 			catch (const subway::Exc* e) {
 				return;
@@ -171,42 +172,42 @@ namespace UnitTest1
 			Assert::AreEqual(true, false);
 		}
 
-		TEST_METHOD(TestBadFile)
+		TEST_METHOD(testBadFile)
 		{
 			subway::subway* a = NULL;
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/-1"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "-1");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/0"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "0");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/1"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "1");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/2"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "2");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/3"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "3");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
 			try {
-				a = new subway::subway(string("../../UnitTest1/TestFile/4"));
-				if (a != NULL) free(a);
+				a = new subway::subway("", baseDir + "4");
+				if (a != NULL) delete a;
 				Assert::Fail();
 			}
 			catch (const subway::Exc* e) {}
@@ -214,8 +215,8 @@ namespace UnitTest1
 
 		void testBC(string path1, string path2, string path3)
 		{
-			subway::subway* sub = new subway::subway(path1);
-			MyTest *mt = new MyTest(path2);
+			subway::subway* sub = new subway::subway("", path1);
+			SubwayTest *mt = new SubwayTest(path2);
 			char buf[MAXN];
 			FILE *cases;
 			fopen_s(&cases, path3.c_str(), "r");
@@ -244,8 +245,8 @@ namespace UnitTest1
 		}
 		void testA(string path1, string path2)
 		{
-			subway::subway* sub = new subway::subway(path1);
-			MyTest *mt = new MyTest(path2);
+			subway::subway* sub = new subway::subway("", path1);
+			SubwayTest *mt = new SubwayTest(path2);
 			char buf[MAXN];
 			srand(time(0));
 			for (int i = 0; i < 10; i++) {
@@ -258,23 +259,81 @@ namespace UnitTest1
 				Assert::AreEqual(tr, sub->getPlanNums().second);
 			}
 		}
-		TEST_METHOD(TestFunctionBC0) {
-			testBC(string("../../Metro/beijing-subway.txt"), string("../../UnitTest1/TestFile/beijing-subway-for-test.txt"), string("../../UnitTest1/TestFile/beijing-subway-cases.txt"));
+		TEST_METHOD(testFunctionBC0) {
+			testBC(baseDir + "beijing/beijing-subway.txt", baseDir + "beijing/beijing-subway-for-test.txt", baseDir + "beijing/beijing-subway-cases.txt");
 		}
 
-		TEST_METHOD(TestFunctionBC1) {
-			testBC(string("../../UnitTest1/TestFile/map2.txt"), string("../../UnitTest1/TestFile/map2-for-test.txt"), string("../../UnitTest1/TestFile/map2-cases.txt"));
+		TEST_METHOD(testFunctionBC1) {
+			testBC(baseDir + "map2.txt", baseDir + "map2-for-test.txt", baseDir + "map2-cases.txt");
 		}
 
-		TEST_METHOD(TestFunctionA0)
+		TEST_METHOD(testFunctionBC2) {
+			testBC(baseDir + "guangzhou/guangzhou-subway.txt", baseDir + "guangzhou/guangzhou-subway-for-test.txt", baseDir + "guangzhou/guangzhou-subway-cases.txt");
+		}
+
+		TEST_METHOD(testFunctionA0)
 		{
-			testA(string("../../Metro/beijing-subway.txt"), string("../../UnitTest1/TestFile/beijing-subway-for-test.txt"));
+			testA(baseDir + "beijing/beijing-subway.txt", baseDir + "beijing/beijing-subway-for-test.txt");
 		}
 
-		TEST_METHOD(TestFunctionA1)
+		TEST_METHOD(testFunctionA1)
 		{
-			testA(string("../../UnitTest1/TestFile/map2.txt"), string("../../UnitTest1/TestFile/map2-for-test.txt"));
+			testA(baseDir + "map2.txt", baseDir + "map2-for-test.txt");
 		}
 
+		TEST_METHOD(testFunctionA2)
+		{
+			testA(baseDir + "guangzhou/guangzhou-subway.txt", baseDir + "guangzhou/guangzhou-subway-for-test.txt");
+		}
+
+	};
+
+
+	TEST_CLASS(UnitTest2)
+	{
+	public:
+		string baseDir = rootDir + "UnitTest1/TestList/";
+		TEST_METHOD(testListInitail) {
+			subway::swList *mps = new subway::swList(baseDir + "list1");
+			if (mps->size() != 2) {
+				Assert::Fail();
+			}
+		}
+
+		TEST_METHOD(testBadList) {
+			subway::swList *mps;
+			try {
+				mps = new subway::swList(baseDir + "list2");
+				if (mps != NULL) {
+					delete mps;
+				}
+				Assert::Fail();
+			}
+			catch (const subway::Exc *e) {}
+			try {
+				mps = new subway::swList(baseDir + "list3");
+				if (mps != NULL) {
+					delete mps;
+				}
+				Assert::Fail();
+			}
+			catch (const subway::Exc *e) {}
+			try {
+				mps = new subway::swList(baseDir + "list4");
+				if (mps != NULL) {
+					delete mps;
+				}
+				Assert::Fail();
+			}
+			catch (const subway::Exc *e) {}
+			try {
+				mps = new subway::swList(baseDir + "list5");
+				if (mps != NULL) {
+					delete mps;
+				}
+				Assert::Fail();
+			}
+			catch (const subway::Exc *e) {}
+		}
 	};
 }

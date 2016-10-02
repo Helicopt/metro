@@ -412,17 +412,8 @@ namespace subway {
 			free(q);
 		}
 
-	protected:
-		~subway() {
-			delete &Stations;
-			delete &mp;
-			delete &Trans;
-			delete &lines;
-			//delete[] e;
-		}
-
 	public:
-		subway(std::string lnm, std::string DataPath, std::string mapP) {
+		subway(std::string lnm, std::string DataPath, std::string mapP = "") {
 			this->LName = lnm;
 			this->dataPath = DataPath;
 			this->mapPic = mapP;
@@ -442,7 +433,6 @@ namespace subway {
 			}
 			catch (const Exc* E)
 			{
-				fprintf_s(stderr, "%s\n", E->info.c_str());
 				if (f != NULL) {
 					fclose(f);
 				}
@@ -453,6 +443,14 @@ namespace subway {
 			exit(1);
 			}*/
 		}
+
+		//~subway() {
+		//	delete &Stations;
+		//	delete &mp;
+		//	delete &Trans;
+		//	delete &lines;
+		//	//delete[] e;
+		//}
 
 		int do_a(std::string s) {
 			if (this->mp.find(s) == this->mp.end()) return 1;
@@ -612,6 +610,9 @@ namespace subway {
 		void initialize(FILE *f) {
 			int n;
 			if (fscanf_s(f, "%d%d", &vs, &n) != 2) throw new Exc("Bad data.");
+			if (n < 0 || n > vs) {
+				throw new Exc("Invalid num.");
+			}
 			char s[256], t[256];
 			for (int i = 0; i < n; ++i) {
 				if (fscanf_s(f, "%s", s, 64)!=1) throw new Exc("Bad data.");
@@ -621,7 +622,7 @@ namespace subway {
 				try {
 					tt = new subway(linm, this->src + "\\" + linm + "\\" + linm + "-subway.txt", this->src + "\\" + linm + "\\" + linm + "-subway.png");
 				}
-				catch (Exc* E) {
+				catch (const Exc* E) {
 					continue;
 				}
 				this->g.push_back(tt);
@@ -635,11 +636,11 @@ namespace subway {
 			FILE* f;
 			fopen_s(&f, (this->src + "\\" + "map.list").c_str(), "r");
 			this->g.clear();
-			if (f == NULL) throw new Exc("Bad data.");
+			if (f == NULL) throw new Exc("List not found");
 			try {
 				this->initialize(f);
 			}
-			catch (Exc* e) {
+			catch (const Exc* e) {
 				throw e;
 			}
 			fclose(f);
@@ -650,7 +651,7 @@ namespace subway {
 			if (x >= 0 && x < this->g.size()) return this->g[x];
 			else return 0;
 		}
-
+		
 		int size() {
 			return this->g.size();
 		}
