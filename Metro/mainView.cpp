@@ -1,5 +1,5 @@
 #define DEBUG 1
-//#undef DEBUG
+#undef DEBUG
 //#define _AFXDLL
 #include<stdio.h>
 #include<windows.h>
